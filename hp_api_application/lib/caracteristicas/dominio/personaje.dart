@@ -1,26 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 
-class Personajes {
+class Personaje {
   final String nombre;
-  final List<String> nombresAlt;
-  final String especie;
-  final String escuela;
-  final String fechaNac;
-  final String anioNac;
-  final bool mago;
-  final String ancestro;
-  final String colorOjos;
-  final String colorCabello;
-  final Map varita;
-  final String patronus;
-  final bool estudianteHowarts;
-  final bool varitaHowarts;
-  final String actor;
-  final List<String> actoresAlt;
-  final bool vive;
-  final String imagen;
-  Personajes._(
+  final List<String>? nombresAlt;
+  final String? especie;
+  final String? escuela;
+  final String? fechaNac;
+  final String? anioNac;
+  final bool? mago;
+  final String? ancestro;
+  final String? colorOjos;
+  final String? colorCabello;
+  final Map? varita;
+  final String? patronus;
+  final bool? estudianteHowarts;
+  final bool? varitaHowarts;
+  final String? actor;
+  final List<String>? actoresAlt;
+  final bool? vive;
+  final String? imagen;
+  Personaje._(
       this.nombre,
       this.nombresAlt,
       this.especie,
@@ -40,30 +40,29 @@ class Personajes {
       this.vive,
       this.imagen);
 
-  factory Personajes.constructor(
-    String nombre,
-    List<String> nombresAlt,
-    String especie,
-    String escuela,
-    String fechaNac,
-    String anioNac,
-    bool mago,
-    String ancestro,
-    String colorOjos,
-    String colorCabello,
-    Map varita,
-    String patronus,
-    bool estudianteHowarts,
-    bool varitaHowarts,
-    String actor,
-    List<String> actoresAlt,
-    bool vive,
-    String imagen,
-  ) {
+  factory Personaje.constructor(
+      {required String nombre,
+      List<String>? nombresAlt,
+      String? especie,
+      String? escuela,
+      String? fechaNac,
+      String? anioNac,
+      bool? mago,
+      String? ancestro,
+      String? colorOjos,
+      String? colorCabello,
+      Map? varita,
+      String? patronus,
+      bool? estudianteHowarts,
+      bool? varitaHowarts,
+      String? actor,
+      List<String>? actoresAlt,
+      bool? vive,
+      String? imagen}) {
     if (nombre.trim().isEmpty) {
       throw PersonajeMalFormado();
     }
-    return Personajes._(
+    return Personaje._(
         nombre,
         nombresAlt,
         especie,
@@ -85,7 +84,7 @@ class Personajes {
   }
 
   @override
-  bool operator ==(covariant Personajes other) {
+  bool operator ==(covariant Personaje other) {
     if (identical(this, other)) return true;
 
     return other.nombre == nombre &&
