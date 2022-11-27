@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
+import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
 
 void main() {
@@ -18,5 +19,16 @@ void main() {
     });
   });
 
-  group('pruebas manejo de errores', () {});
+  group('pruebas manejo de errores: ', () {
+    test('con Harry Popote arroja PersonajeNoEncontrado', () {
+      RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje();
+      var resultado =
+          rp.obtenerPersonaje(NombreFormado.contructor('Harry Popote'));
+      resultado.match((l) {
+        expect(l, isA<PersonajeNoEncontrado>());
+      }, (r) {
+        assert(false);
+      });
+    });
+  });
 }
