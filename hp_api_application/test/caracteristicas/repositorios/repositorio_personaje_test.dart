@@ -50,7 +50,7 @@ void main() {
       });
 
       test('con Hermione Gringer arroja PersonajeNoEncontrado', () async {
-        RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje();
+        RepositorioPersonajeReal rp = RepositorioPersonajeReal();
         var resultado = await rp
             .obtenerPersonaje(NombreFormado.contructor('Hermione Gringer'));
         resultado.match((l) {
