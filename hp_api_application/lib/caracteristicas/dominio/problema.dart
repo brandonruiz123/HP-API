@@ -9,3 +9,5 @@ class PersonajeNoEncontrado extends Problema {}
 class JsonNoEncontrado extends Problema {}
 
 class JsonMalFormado extends Problema {}
+
+class ErrorDeConexion extends Problema {}
