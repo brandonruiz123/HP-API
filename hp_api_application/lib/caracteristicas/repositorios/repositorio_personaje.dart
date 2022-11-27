@@ -18,7 +18,7 @@ class RepositorioPruebasPersonaje extends RepositorioPersonaje {
     String jsonPersonaje = './lib/caracteristicas/datos/datos_personaje.json';
     List<dynamic> json;
     try {
-      json = jsonDecode((File(jsonPersonaje).readAsStringSync()));
+      json = leeJson(jsonPersonaje);
     } catch (e) {
       return Left(JsonNoEncontrado());
     }
@@ -90,5 +90,11 @@ class RepositorioPruebasPersonaje extends RepositorioPersonaje {
       }
     }
     return Left(PersonajeNoEncontrado());
+  }
+
+  List<dynamic> leeJson(String rutaJson) {
+    List<dynamic> json;
+    json = jsonDecode((File(rutaJson).readAsStringSync()));
+    return json;
   }
 }
