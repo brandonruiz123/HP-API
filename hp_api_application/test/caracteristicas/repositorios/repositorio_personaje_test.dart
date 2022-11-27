@@ -5,7 +5,7 @@ import 'package:hp_api_application/caracteristicas/repositorios/repositorio_pers
 
 void main() {
   group('RepositorioPersonaje', () {
-    group('pruebas de offline: ', () {
+    group('pruebas offline: ', () {
       test('con Harry Potter me devuelve un personaje', () async {
         RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje();
         var resultado =

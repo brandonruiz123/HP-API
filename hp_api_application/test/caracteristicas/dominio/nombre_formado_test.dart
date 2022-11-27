@@ -4,9 +4,9 @@ import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 
 void main() {
   group('NombreFormado:', () {
-    test('nombre que no este vacio no arroja error', () {
+    test('nombre que no este vacío no arroja error', () {
       NombreFormado n1 = NombreFormado.contructor('Brandon');
-      expect(n1.nombre, 'Brandon');
+      expect(n1.valor, 'Brandon');
     });
 
     test('nombre vacío o con solo espacios arroja NombreMalFormado', () {

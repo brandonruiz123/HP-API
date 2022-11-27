@@ -36,61 +36,29 @@ class RepositorioPersonajeReal extends RepositorioPersonaje {
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
-    Personaje p;
+    List<Personaje> listaPersonajes = [];
+    List<dynamic> json = [];
     String base = 'https://hp-api.onrender.com/api/characters';
-    Uri direccion = Uri.parse(base);
-    final respuesta = await http.get(direccion);
-    if (respuesta.statusCode != 200) {
-      return left(ErrorDeConexion());
-    }
-    List<dynamic> json = jsonDecode(respuesta.body);
-
-    for (var i = 0; i < json.length; i++) {
+    if (listaPersonajes.isEmpty) {
+      //si la lista esta vacia, consume la api
+      Uri direccion = Uri.parse(base);
+      final respuesta = await http.get(direccion);
+      if (respuesta.statusCode != 200) {
+        return left(ErrorDeConexion());
+      }
+      //si no hubo problema al recibir la respuesta, esta se guarda
+      json = jsonDecode(respuesta.body);
+      //se obtiene la lista de los personajes
       try {
-        if (json[i]["name"] == nombre.nombre) {
-          _nombrejson = json[i]['name'];
-          _nombresAlt = json[i]['alternate_names'];
-          _especie = json[i]['species'];
-          _genero = json[i]['gender'];
-          _escuela = json[i]['house'];
-          _fechaNac = json[i]['dateOfBirth'];
-          _anioNac = json[i]['yearOfBirth'];
-          _mago = json[i]['wizard'];
-          _ancestro = json[i]['ancestry'];
-          _colorOjos = json[i]['eyeColour'];
-          _colorCabello = json[i]['hairColour'];
-          _varita = json[i]['wand'];
-          _patronus = json[i]['patronus'];
-          _estudianteHowarts = json[i]['hogwartsStudent'];
-          _varitaHowarts = json[i]['hogwartsStaff'];
-          _actor = json[i]['actor'];
-          _actoresAlt = json[i]['alternate_actors'];
-          _vive = json[i]['alive'];
-          _imagen = json[i]['image'];
-          p = Personaje.constructor(
-              nombre: _nombrejson,
-              actor: _actor,
-              actoresAlt: _actoresAlt,
-              ancestro: _ancestro,
-              anioNac: _anioNac,
-              colorCabello: _colorCabello,
-              colorOjos: _colorOjos,
-              escuela: _escuela,
-              especie: _especie,
-              estudianteHowarts: _estudianteHowarts,
-              fechaNac: _fechaNac,
-              genero: _genero,
-              mago: _mago,
-              nombresAlt: _nombresAlt,
-              imagen: _imagen,
-              patronus: _patronus,
-              varita: _varita,
-              varitaHowarts: _varitaHowarts,
-              vive: _vive);
-          return Right(p);
-        }
+        listaPersonajes = obtenerListaPersonajes(json);
       } catch (e) {
         return Left(JsonMalFormado());
+      }
+    }
+    //si la lista no esta vacia no consume la api y solo busca el personaje
+    for (var i = 0; i < listaPersonajes.length; i++) {
+      if (listaPersonajes[i].nombre == nombre.valor) {
+        return Right(listaPersonajes[i]);
       }
     }
     return Left(PersonajeNoEncontrado());
@@ -101,61 +69,25 @@ class RepositorioPruebasPersonaje extends RepositorioPersonaje {
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
-    Personaje p;
     String jsonPersonaje = './lib/caracteristicas/datos/datos_personaje.json';
-    List<dynamic> json;
-    try {
-      json = leeJson(jsonPersonaje);
-    } catch (e) {
-      return Left(JsonNoEncontrado());
-    }
-    for (var i = 0; i < json.length; i++) {
+    List<dynamic> json = [];
+    List<Personaje> listaPersonajes = [];
+    if (listaPersonajes.isEmpty) {
       try {
-        if (json[i]["name"] == nombre.nombre) {
-          _nombrejson = json[i]['name'];
-          _nombresAlt = json[i]['alternate_names'];
-          _especie = json[i]['species'];
-          _genero = json[i]['gender'];
-          _escuela = json[i]['house'];
-          _fechaNac = json[i]['dateOfBirth'];
-          _anioNac = json[i]['yearOfBirth'];
-          _mago = json[i]['wizard'];
-          _ancestro = json[i]['ancestry'];
-          _colorOjos = json[i]['eyeColour'];
-          _colorCabello = json[i]['hairColour'];
-          _varita = json[i]['wand'];
-          _patronus = json[i]['patronus'];
-          _estudianteHowarts = json[i]['hogwartsStudent'];
-          _varitaHowarts = json[i]['hogwartsStaff'];
-          _actor = json[i]['actor'];
-          _actoresAlt = json[i]['alternate_actors'];
-          _vive = json[i]['alive'];
-          _imagen = json[i]['image'];
-          p = Personaje.constructor(
-              nombre: _nombrejson,
-              actor: _actor,
-              actoresAlt: _actoresAlt,
-              ancestro: _ancestro,
-              anioNac: _anioNac,
-              colorCabello: _colorCabello,
-              colorOjos: _colorOjos,
-              escuela: _escuela,
-              especie: _especie,
-              estudianteHowarts: _estudianteHowarts,
-              fechaNac: _fechaNac,
-              genero: _genero,
-              mago: _mago,
-              nombresAlt: _nombresAlt,
-              imagen: _imagen,
-              patronus: _patronus,
-              varita: _varita,
-              varitaHowarts: _varitaHowarts,
-              vive: _vive);
-          return Right(p);
-        }
+        json = leeJson(jsonPersonaje);
       } catch (e) {
-        return Left(JsonMalFormado());
+        return Left(JsonNoEncontrado());
       }
+    }
+    try {
+      listaPersonajes = obtenerListaPersonajes(json);
+      for (var i = 0; i < listaPersonajes.length; i++) {
+        if (listaPersonajes[i].nombre == nombre.valor) {
+          return Right(listaPersonajes[i]);
+        }
+      }
+    } catch (e) {
+      return Left(JsonMalFormado());
     }
     return Left(PersonajeNoEncontrado());
   }
@@ -167,69 +99,50 @@ List<dynamic> leeJson(String rutaJson) {
   return json;
 }
 
-Future<Either<Problema, List<Personaje>>> obtenerListaPersonajes() async {
-  Personaje p;
+List<Personaje> obtenerListaPersonajes(List<dynamic> json) {
   List<Personaje> listaPersonajes = [];
-  List<dynamic> json = [];
-  String base = 'https://hp-api.onrender.com/api/characters';
-  if (listaPersonajes.isEmpty) {
-    Uri direccion = Uri.parse(base);
-    final respuesta = await http.get(direccion);
-    if (respuesta.statusCode != 200) {
-      return left(ErrorDeConexion());
-    }
-    json = jsonDecode(respuesta.body);
-  }
-
+  Personaje p;
   for (var i = 0; i < json.length; i++) {
-    try {
-      _nombrejson = json[i]['name'];
-      _nombresAlt = json[i]['alternate_names'];
-      _especie = json[i]['species'];
-      _genero = json[i]['gender'];
-      _escuela = json[i]['house'];
-      _fechaNac = json[i]['dateOfBirth'];
-      _anioNac = json[i]['yearOfBirth'];
-      _mago = json[i]['wizard'];
-      _ancestro = json[i]['ancestry'];
-      _colorOjos = json[i]['eyeColour'];
-      _colorCabello = json[i]['hairColour'];
-      _varita = json[i]['wand'];
-      _patronus = json[i]['patronus'];
-      _estudianteHowarts = json[i]['hogwartsStudent'];
-      _varitaHowarts = json[i]['hogwartsStaff'];
-      _actor = json[i]['actor'];
-      _actoresAlt = json[i]['alternate_actors'];
-      _vive = json[i]['alive'];
-      _imagen = json[i]['image'];
-      p = Personaje.constructor(
-          nombre: _nombrejson,
-          actor: _actor,
-          actoresAlt: _actoresAlt,
-          ancestro: _ancestro,
-          anioNac: _anioNac,
-          colorCabello: _colorCabello,
-          colorOjos: _colorOjos,
-          escuela: _escuela,
-          especie: _especie,
-          estudianteHowarts: _estudianteHowarts,
-          fechaNac: _fechaNac,
-          genero: _genero,
-          mago: _mago,
-          nombresAlt: _nombresAlt,
-          imagen: _imagen,
-          patronus: _patronus,
-          varita: _varita,
-          varitaHowarts: _varitaHowarts,
-          vive: _vive);
-      listaPersonajes.add(p);
-    } catch (e) {
-      print('retorno left');
-      return Left(JsonMalFormado());
-    }
+    _nombrejson = json[i]['name'];
+    _nombresAlt = json[i]['alternate_names'];
+    _especie = json[i]['species'];
+    _genero = json[i]['gender'];
+    _escuela = json[i]['house'];
+    _fechaNac = json[i]['dateOfBirth'];
+    _anioNac = json[i]['yearOfBirth'];
+    _mago = json[i]['wizard'];
+    _ancestro = json[i]['ancestry'];
+    _colorOjos = json[i]['eyeColour'];
+    _colorCabello = json[i]['hairColour'];
+    _varita = json[i]['wand'];
+    _patronus = json[i]['patronus'];
+    _estudianteHowarts = json[i]['hogwartsStudent'];
+    _varitaHowarts = json[i]['hogwartsStaff'];
+    _actor = json[i]['actor'];
+    _actoresAlt = json[i]['alternate_actors'];
+    _vive = json[i]['alive'];
+    _imagen = json[i]['image'];
+    p = Personaje.constructor(
+        nombre: _nombrejson,
+        actor: _actor,
+        actoresAlt: _actoresAlt,
+        ancestro: _ancestro,
+        anioNac: _anioNac,
+        colorCabello: _colorCabello,
+        colorOjos: _colorOjos,
+        escuela: _escuela,
+        especie: _especie,
+        estudianteHowarts: _estudianteHowarts,
+        fechaNac: _fechaNac,
+        genero: _genero,
+        mago: _mago,
+        nombresAlt: _nombresAlt,
+        imagen: _imagen,
+        patronus: _patronus,
+        varita: _varita,
+        varitaHowarts: _varitaHowarts,
+        vive: _vive);
+    listaPersonajes.add(p);
   }
-  for (var i = 0; i < listaPersonajes.length; i++) {
-    print(listaPersonajes[i].nombre);
-  }
-  return Right(listaPersonajes);
+  return listaPersonajes;
 }
