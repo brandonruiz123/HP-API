@@ -6,6 +6,10 @@ class NombreMalFormado extends Problema {}
 
 class PersonajeNoEncontrado extends Problema {}
 
+class EstudianteNoEncontrado extends Problema {}
+
+class NoEsEstudiante extends Problema {}
+
 class JsonNoEncontrado extends Problema {}
 
 class JsonMalFormado extends Problema {}
