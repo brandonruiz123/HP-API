@@ -37,6 +37,7 @@ dependencies:
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
   bloc_test: ^9.1.0
+  fpdart: ^0.3.0
 
 dev_dependencies:
   flutter_test:

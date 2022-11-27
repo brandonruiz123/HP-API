@@ -3,11 +3,12 @@ import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 
 class Personaje {
   final String nombre;
-  final List<String>? nombresAlt;
+  final List<dynamic>? nombresAlt;
   final String? especie;
+  final String? genero;
   final String? escuela;
   final String? fechaNac;
-  final String? anioNac;
+  final int? anioNac;
   final bool? mago;
   final String? ancestro;
   final String? colorOjos;
@@ -17,13 +18,14 @@ class Personaje {
   final bool? estudianteHowarts;
   final bool? varitaHowarts;
   final String? actor;
-  final List<String>? actoresAlt;
+  final List<dynamic>? actoresAlt;
   final bool? vive;
   final String? imagen;
   Personaje._(
       this.nombre,
       this.nombresAlt,
       this.especie,
+      this.genero,
       this.escuela,
       this.fechaNac,
       this.anioNac,
@@ -42,11 +44,12 @@ class Personaje {
 
   factory Personaje.constructor(
       {required String nombre,
-      List<String>? nombresAlt,
+      List<dynamic>? nombresAlt,
       String? especie,
+      String? genero,
       String? escuela,
       String? fechaNac,
-      String? anioNac,
+      int? anioNac,
       bool? mago,
       String? ancestro,
       String? colorOjos,
@@ -56,7 +59,7 @@ class Personaje {
       bool? estudianteHowarts,
       bool? varitaHowarts,
       String? actor,
-      List<String>? actoresAlt,
+      List<dynamic>? actoresAlt,
       bool? vive,
       String? imagen}) {
     if (nombre.trim().isEmpty) {
@@ -66,6 +69,7 @@ class Personaje {
         nombre,
         nombresAlt,
         especie,
+        genero,
         escuela,
         fechaNac,
         anioNac,
@@ -90,6 +94,7 @@ class Personaje {
     return other.nombre == nombre &&
         listEquals(other.nombresAlt, nombresAlt) &&
         other.especie == especie &&
+        other.genero == genero &&
         other.escuela == escuela &&
         other.fechaNac == fechaNac &&
         other.anioNac == anioNac &&
@@ -112,6 +117,7 @@ class Personaje {
     return nombre.hashCode ^
         nombresAlt.hashCode ^
         especie.hashCode ^
+        genero.hashCode ^
         escuela.hashCode ^
         fechaNac.hashCode ^
         anioNac.hashCode ^
