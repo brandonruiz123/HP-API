@@ -40,7 +40,7 @@ class RepositorioEstudianteReal extends RepositorioEstudiante {
   @override
   Future<Either<Problema, Personaje>> obtenerEstudiante(
       NombreFormado nombre) async {
-    String base = 'https://hp-api.onrender.com/api/characters';
+    String base = 'https://hp-api.onrender.com/api/characters/students';
     if (listaEstudiantes.isEmpty) {
       //si la lista esta vacia, consume la api
       Uri direccion = Uri.parse(base);
