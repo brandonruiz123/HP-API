@@ -28,10 +28,10 @@ List<dynamic>? _actoresAlt;
 bool? _vive;
 String? _imagen;
 
-String jsonStaff = './lib/caracteristicas/datos/datos_staff.json';
-List<dynamic> json = [];
-List<Personaje> listaStaff = [];
-String base = 'https://hp-api.onrender.com/api/characters/staff';
+String _jsonStaff = './lib/caracteristicas/datos/datos_staff.json';
+List<dynamic> _json = [];
+List<Personaje> _listaStaff = [];
+String _base = 'https://hp-api.onrender.com/api/characters/staff';
 
 abstract class RepositorioStaff {
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre);
@@ -40,29 +40,29 @@ abstract class RepositorioStaff {
 class RepositorioStaffReal extends RepositorioStaff {
   @override
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre) async {
-    if (listaStaff.isEmpty) {
+    if (_listaStaff.isEmpty) {
       //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(base);
+      Uri direccion = Uri.parse(_base);
       final respuesta = await http.get(direccion);
       if (respuesta.statusCode != 200) {
         return left(ErrorDeConexion());
       }
       //si no hubo problema al recibir la respuesta, esta se guarda
-      json = jsonDecode(respuesta.body);
+      _json = jsonDecode(respuesta.body);
       //se obtiene la lista de los personajes
       try {
-        listaStaff = obtenerListaStaff(json);
+        _listaStaff = obtenerListaStaff(_json);
       } catch (e) {
         return Left(JsonMalFormado());
       }
     }
     //si la lista no esta vacia no consume la api y solo busca el personaje
-    for (var i = 0; i < listaStaff.length; i++) {
-      if (listaStaff[i].varitaHowarts == false) {
+    for (var i = 0; i < _listaStaff.length; i++) {
+      if (_listaStaff[i].varitaHowarts == false) {
         return Left(NoEsStaff());
       }
-      if (listaStaff[i].nombre == nombre.valor) {
-        return Right(listaStaff[i]);
+      if (_listaStaff[i].nombre == nombre.valor) {
+        return Right(_listaStaff[i]);
       }
     }
     return Left(StaffNoEncontrado());
@@ -72,21 +72,21 @@ class RepositorioStaffReal extends RepositorioStaff {
 class RepositorioPruebasStaff extends RepositorioStaff {
   @override
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre) async {
-    if (listaStaff.isEmpty) {
+    if (_listaStaff.isEmpty) {
       try {
-        json = leeJson(jsonStaff);
+        _json = leeJson(_jsonStaff);
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
     }
     try {
-      listaStaff = obtenerListaStaff(json);
-      for (var i = 0; i < listaStaff.length; i++) {
-        if (listaStaff[i].varitaHowarts == false) {
+      _listaStaff = obtenerListaStaff(_json);
+      for (var i = 0; i < _listaStaff.length; i++) {
+        if (_listaStaff[i].varitaHowarts == false) {
           return Left(NoEsStaff());
         }
-        if (listaStaff[i].nombre == nombre.valor) {
-          return Right(listaStaff[i]);
+        if (_listaStaff[i].nombre == nombre.valor) {
+          return Right(_listaStaff[i]);
         }
       }
     } catch (e) {

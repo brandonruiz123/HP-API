@@ -28,6 +28,11 @@ List<dynamic>? _actoresAlt;
 bool? _vive;
 String? _imagen;
 
+List<Personaje> _listaPersonajes = [];
+List<dynamic> _json = [];
+String _base = 'https://hp-api.onrender.com/api/characters';
+String _jsonPersonaje = './lib/caracteristicas/datos/datos_personaje.json';
+
 abstract class RepositorioPersonaje {
   Future<Either<Problema, Personaje>> obtenerPersonaje(NombreFormado nombre);
 }
@@ -36,29 +41,26 @@ class RepositorioPersonajeReal extends RepositorioPersonaje {
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
-    List<Personaje> listaPersonajes = [];
-    List<dynamic> json = [];
-    String base = 'https://hp-api.onrender.com/api/characters';
-    if (listaPersonajes.isEmpty) {
+    if (_listaPersonajes.isEmpty) {
       //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(base);
+      Uri direccion = Uri.parse(_base);
       final respuesta = await http.get(direccion);
       if (respuesta.statusCode != 200) {
         return left(ErrorDeConexion());
       }
       //si no hubo problema al recibir la respuesta, esta se guarda
-      json = jsonDecode(respuesta.body);
+      _json = jsonDecode(respuesta.body);
       //se obtiene la lista de los personajes
       try {
-        listaPersonajes = obtenerListaPersonajes(json);
+        _listaPersonajes = obtenerListaPersonajes(_json);
       } catch (e) {
         return Left(JsonMalFormado());
       }
     }
     //si la lista no esta vacia no consume la api y solo busca el personaje
-    for (var i = 0; i < listaPersonajes.length; i++) {
-      if (listaPersonajes[i].nombre == nombre.valor) {
-        return Right(listaPersonajes[i]);
+    for (var i = 0; i < _listaPersonajes.length; i++) {
+      if (_listaPersonajes[i].nombre == nombre.valor) {
+        return Right(_listaPersonajes[i]);
       }
     }
     return Left(PersonajeNoEncontrado());
@@ -69,21 +71,18 @@ class RepositorioPruebasPersonaje extends RepositorioPersonaje {
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
-    String jsonPersonaje = './lib/caracteristicas/datos/datos_personaje.json';
-    List<dynamic> json = [];
-    List<Personaje> listaPersonajes = [];
-    if (listaPersonajes.isEmpty) {
+    if (_listaPersonajes.isEmpty) {
       try {
-        json = leeJson(jsonPersonaje);
+        _json = leeJson(_jsonPersonaje);
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
     }
     try {
-      listaPersonajes = obtenerListaPersonajes(json);
-      for (var i = 0; i < listaPersonajes.length; i++) {
-        if (listaPersonajes[i].nombre == nombre.valor) {
-          return Right(listaPersonajes[i]);
+      _listaPersonajes = obtenerListaPersonajes(_json);
+      for (var i = 0; i < _listaPersonajes.length; i++) {
+        if (_listaPersonajes[i].nombre == nombre.valor) {
+          return Right(_listaPersonajes[i]);
         }
       }
     } catch (e) {

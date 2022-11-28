@@ -28,9 +28,10 @@ List<dynamic>? _actoresAlt;
 bool? _vive;
 String? _imagen;
 
-String jsonEstudiante = './lib/caracteristicas/datos/datos_estudiantes.json';
-List<dynamic> json = [];
-List<Personaje> listaEstudiantes = [];
+String _jsonEstudiante = './lib/caracteristicas/datos/datos_estudiantes.json';
+List<dynamic> _json = [];
+List<Personaje> _listaEstudiantes = [];
+String _base = 'https://hp-api.onrender.com/api/characters/students';
 
 abstract class RepositorioEstudiante {
   Future<Either<Problema, Personaje>> obtenerEstudiante(NombreFormado nombre);
@@ -40,30 +41,29 @@ class RepositorioEstudianteReal extends RepositorioEstudiante {
   @override
   Future<Either<Problema, Personaje>> obtenerEstudiante(
       NombreFormado nombre) async {
-    String base = 'https://hp-api.onrender.com/api/characters/students';
-    if (listaEstudiantes.isEmpty) {
+    if (_listaEstudiantes.isEmpty) {
       //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(base);
+      Uri direccion = Uri.parse(_base);
       final respuesta = await http.get(direccion);
       if (respuesta.statusCode != 200) {
         return left(ErrorDeConexion());
       }
       //si no hubo problema al recibir la respuesta, esta se guarda
-      json = jsonDecode(respuesta.body);
+      _json = jsonDecode(respuesta.body);
       //se obtiene la lista de los personajes
       try {
-        listaEstudiantes = obtenerListaEstudiantes(json);
+        _listaEstudiantes = obtenerListaEstudiantes(_json);
       } catch (e) {
         return Left(JsonMalFormado());
       }
     }
     //si la lista no esta vacia no consume la api y solo busca el personaje
-    for (var i = 0; i < listaEstudiantes.length; i++) {
-      if (listaEstudiantes[i].estudianteHowarts == false) {
+    for (var i = 0; i < _listaEstudiantes.length; i++) {
+      if (_listaEstudiantes[i].estudianteHowarts == false) {
         return Left(NoEsEstudiante());
       }
-      if (listaEstudiantes[i].nombre == nombre.valor) {
-        return Right(listaEstudiantes[i]);
+      if (_listaEstudiantes[i].nombre == nombre.valor) {
+        return Right(_listaEstudiantes[i]);
       }
     }
     return Left(EstudianteNoEncontrado());
@@ -74,21 +74,21 @@ class RepositorioPruebasEstudiante extends RepositorioEstudiante {
   @override
   Future<Either<Problema, Personaje>> obtenerEstudiante(
       NombreFormado nombre) async {
-    if (listaEstudiantes.isEmpty) {
+    if (_listaEstudiantes.isEmpty) {
       try {
-        json = leeJson(jsonEstudiante);
+        _json = leeJson(_jsonEstudiante);
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
     }
     try {
-      listaEstudiantes = obtenerListaEstudiantes(json);
-      for (var i = 0; i < listaEstudiantes.length; i++) {
-        if (listaEstudiantes[i].estudianteHowarts == false) {
+      _listaEstudiantes = obtenerListaEstudiantes(_json);
+      for (var i = 0; i < _listaEstudiantes.length; i++) {
+        if (_listaEstudiantes[i].estudianteHowarts == false) {
           return Left(NoEsEstudiante());
         }
-        if (listaEstudiantes[i].nombre == nombre.valor) {
-          return Right(listaEstudiantes[i]);
+        if (_listaEstudiantes[i].nombre == nombre.valor) {
+          return Right(_listaEstudiantes[i]);
         }
       }
     } catch (e) {
