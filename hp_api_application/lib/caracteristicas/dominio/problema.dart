@@ -4,6 +4,8 @@ class PersonajeMalFormado extends Problema {}
 
 class NombreMalFormado extends Problema {}
 
+class HechizoMalFormado extends Problema {}
+
 class PersonajeNoEncontrado extends Problema {}
 
 class EstudianteNoEncontrado extends Problema {}
