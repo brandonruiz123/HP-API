@@ -22,4 +22,6 @@ class JsonNoEncontrado extends Problema {}
 
 class JsonMalFormado extends Problema {}
 
+class ModoEquivocado extends Problema {}
+
 class ErrorDeConexion extends Problema {}
