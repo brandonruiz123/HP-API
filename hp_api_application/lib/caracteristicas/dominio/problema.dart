@@ -18,6 +18,8 @@ class EscuelaNoEncontrada extends Problema {}
 
 class StaffNoEncontrado extends Problema {}
 
+class HechizoNoEncontrado extends Problema{}
+
 class JsonNoEncontrado extends Problema {}
 
 class JsonMalFormado extends Problema {}
