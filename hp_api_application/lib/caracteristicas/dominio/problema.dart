@@ -12,6 +12,8 @@ class NoEsEstudiante extends Problema {}
 
 class NoEsStaff extends Problema {}
 
+class NoEsDeLaEscuela extends Problema {}
+
 class StaffNoEncontrado extends Problema {}
 
 class JsonNoEncontrado extends Problema {}
