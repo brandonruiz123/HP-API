@@ -10,7 +10,7 @@ void main() {
       resultado.match((l) {
         assert(false);
       }, (r) {
-        expect(r[0]['name'], 'Harry Potter');
+        expect(r, isA<List<dynamic>>());
       });    
   });
   test('con modo: online y url: https://hp-api.onrender.com/api/characters devuelve un json', () async{
@@ -19,7 +19,7 @@ void main() {
       resultado.match((l) {
         assert(false);
       }, (r) {
-        expect(r[1]['name'], 'Hermione Granger');
+        expect(r, isA<List<dynamic>>());
       });
   });
   test('con modo: offline y ruta: "" arroja JsonNoEncontrado', () async{
@@ -46,6 +46,15 @@ void main() {
     resultado.match((l) {
       expect(l, isA<JsonNoEncontrado>());
     }, (r) {
+      assert(false);
+    });
+  });
+  test('con modo: offline y archivo: datos_erroneos_estudiantes.json arroja JsonMalFormado', () async{
+    RepositorioPruebaJson rpj = RepositorioPruebaJson();
+    var resultado = await rpj.obtenerDatos('offline', './test/caracteristicas/datos/datos_erroneos_estudiantes.json');
+    resultado.match((l){
+      expect(l, isA<JsonMalFormado>());
+    }, (r){
       assert(false);
     });
   });

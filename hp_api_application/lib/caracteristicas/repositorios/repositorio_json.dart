@@ -23,6 +23,11 @@ class RepositorioPruebaJson extends RepositorioJson{
         return left(ErrorDeConexion());
       }
         _json = jsonDecode(respuesta.body);
+        for (var i = 0; i < _json.length; i++) {
+          if (!_json[i].toString().contains('name:')) {
+            return Left(JsonMalFormado());
+          } 
+        }
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
@@ -31,6 +36,11 @@ class RepositorioPruebaJson extends RepositorioJson{
     if (modo == 'offline') {
       try {
         _json = jsonDecode((File(ruta).readAsStringSync()));
+        for (var i = 0; i < _json.length; i++) {
+          if (!_json[i].toString().contains('name:')) {
+            return Left(JsonMalFormado());
+          } 
+        }
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
@@ -38,4 +48,5 @@ class RepositorioPruebaJson extends RepositorioJson{
     }
     return Left(ModoEquivocado());
   }
+
 }
