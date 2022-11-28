@@ -16,13 +16,13 @@ class RepositorioPruebaJson extends RepositorioJson{
   @override
   Future<Either<Problema,List<dynamic>>> obtenerDatos(String modo, String ruta)async{
     if (modo == 'online') {
+      try {
       Uri direccion = Uri.parse(ruta);
       final respuesta = await http.get(direccion);
       if (respuesta.statusCode != 200) {
         return left(ErrorDeConexion());
       }
-      try {
-      _json = jsonDecode(respuesta.body);
+        _json = jsonDecode(respuesta.body);
       } catch (e) {
         return Left(JsonNoEncontrado());
       }
