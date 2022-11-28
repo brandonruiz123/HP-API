@@ -12,7 +12,7 @@ class NoEsEstudiante extends Problema {}
 
 class NoEsStaff extends Problema {}
 
-class NoEsDeLaEscuela extends Problema {}
+class EscuelaNoEncontrada extends Problema {}
 
 class StaffNoEncontrado extends Problema {}
 

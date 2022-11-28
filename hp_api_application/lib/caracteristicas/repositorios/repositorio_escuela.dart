@@ -63,21 +63,20 @@ class RepositorioEscuelaReal extends RepositorioEscuela {
     //si la lista no esta vacia no consume la api y solo busca el personaje
     for (var i = 0; i < listaEscuelas.length; i++) {
       if (listaEscuelas[i].escuela != escuela.valor) {
-        return Left(NoEsDeLaEscuela());
+        return Left(EscuelaNoEncontrada());
       }
       if (listaEscuelas[i].nombre == nombre.valor) {
         return Right(listaEscuelas[i]);
       }
     }
-    return Left(EstudianteNoEncontrado());
+    return Left(PersonajeNoEncontrado());
   }
 }
 
-class RepositorioPruebasEstudiante extends RepositorioEscuela {
+class RepositorioPruebasEscuela extends RepositorioEscuela {
   @override
   Future<Either<Problema, Personaje>> obtenerEscuela(
       NombreFormado escuela, NombreFormado nombre) async {
-    String valorEscuela = escuela.valor.toLowerCase();
     if (listaEscuelas.isEmpty) {
       try {
         json = leeJson(jsonGryffindor);
@@ -88,8 +87,8 @@ class RepositorioPruebasEstudiante extends RepositorioEscuela {
     try {
       listaEscuelas = obtenerListaEscuelas(json);
       for (var i = 0; i < listaEscuelas.length; i++) {
-        if (listaEscuelas[i].escuela != valorEscuela) {
-          return Left(NoEsDeLaEscuela());
+        if (listaEscuelas[i].escuela != escuela.valor) {
+          return Left(EscuelaNoEncontrada());
         }
         if (listaEscuelas[i].nombre == nombre.valor) {
           return Right(listaEscuelas[i]);
@@ -98,7 +97,7 @@ class RepositorioPruebasEstudiante extends RepositorioEscuela {
     } catch (e) {
       return Left(JsonMalFormado());
     }
-    return Left(EstudianteNoEncontrado());
+    return Left(PersonajeNoEncontrado());
   }
 }
 
