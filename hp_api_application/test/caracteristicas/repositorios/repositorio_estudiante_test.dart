@@ -9,7 +9,7 @@ void main() {
       test('con James Potter me devuelve un estudiante', () async {
         RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante();
         var resultado = await rpe
-            .obtenerEstudiante(NombreFormado.contructor('James Potter'));
+            .obtenerEstudiante(NombreFormado.constructor('James Potter'));
         resultado.match((l) {
           expect(false, equals(true));
         }, (r) {
@@ -27,7 +27,7 @@ void main() {
       test('con James Patter arroja EstudianteNoEncontrado', () async {
         RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante();
         var resultado = await rpe
-            .obtenerEstudiante(NombreFormado.contructor('James Patter'));
+            .obtenerEstudiante(NombreFormado.constructor('James Patter'));
         resultado.match((l) {
           expect(l, isA<EstudianteNoEncontrado>());
         }, (r) {
@@ -39,7 +39,7 @@ void main() {
       test('con Michael Corner me devuelve un estudiante', () async {
         RepositorioEstudianteReal rpe = RepositorioEstudianteReal();
         var resultado = await rpe
-            .obtenerEstudiante(NombreFormado.contructor('Michael Corner'));
+            .obtenerEstudiante(NombreFormado.constructor('Michael Corner'));
         resultado.match((l) {
           expect(false, equals(true));
         }, (r) {
@@ -52,7 +52,7 @@ void main() {
       test('con Miguel Corner arroja EstudianteNoEncontrado', () async {
         RepositorioEstudianteReal rpe = RepositorioEstudianteReal();
         var resultado = await rpe
-            .obtenerEstudiante(NombreFormado.contructor('Miguel Corner'));
+            .obtenerEstudiante(NombreFormado.constructor('Miguel Corner'));
         resultado.match((l) {
           expect(l, isA<EstudianteNoEncontrado>());
         }, (r) {

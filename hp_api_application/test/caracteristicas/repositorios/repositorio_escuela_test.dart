@@ -9,8 +9,8 @@ void main() {
       test('Con Ron Weasley y Gryffindor devuelve un Personaje', () async {
         RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Gryffindor'),
-            NombreFormado.contructor('Ron Weasley'));
+            NombreFormado.constructor('Gryffindor'),
+            NombreFormado.constructor('Ron Weasley'));
         resultado.match((l) {
           expect(false, true);
         }, (r) {
@@ -24,8 +24,8 @@ void main() {
           () async {
         RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Gryffindor'),
-            NombreFormado.contructor('Run Wisli'));
+            NombreFormado.constructor('Gryffindor'),
+            NombreFormado.constructor('Run Wisli'));
         resultado.match((l) {
           expect(l, isA<PersonajeNoEncontrado>());
         }, (r) {
@@ -35,8 +35,8 @@ void main() {
       test('Con Ron Weasley y Greyfindor arroja EscuelaNoEncontrada', () async {
         RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Greyfindor'),
-            NombreFormado.contructor('Ron Weasley'));
+            NombreFormado.constructor('Greyfindor'),
+            NombreFormado.constructor('Ron Weasley'));
         resultado.match((l) {
           expect(l, isA<EscuelaNoEncontrada>());
         }, (r) {
@@ -48,8 +48,8 @@ void main() {
       test('con Eloise Midgen y Gryffindor devuelve un Personaje', () async {
         RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Gryffindor'),
-            NombreFormado.contructor('Eloise Midgen'));
+            NombreFormado.constructor('Gryffindor'),
+            NombreFormado.constructor('Eloise Midgen'));
         resultado.match((l) {
           expect(false, true);
         }, (r) {
@@ -62,8 +62,8 @@ void main() {
           () async {
         RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Gryffindor'),
-            NombreFormado.contructor('Eluis Migen'));
+            NombreFormado.constructor('Gryffindor'),
+            NombreFormado.constructor('Eluis Migen'));
         resultado.match((l) {
           expect(l, isA<PersonajeNoEncontrado>());
         }, (r) {
@@ -74,8 +74,8 @@ void main() {
           () async {
         RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
         var resultado = await rpe.obtenerEscuela(
-            NombreFormado.contructor('Greyfindor'),
-            NombreFormado.contructor('Eluis Migen'));
+            NombreFormado.constructor('Greyfindor'),
+            NombreFormado.constructor('Eluis Migen'));
         resultado.match((l) {
           expect(l, isA<EscuelaNoEncontrada>());
         }, (r) {

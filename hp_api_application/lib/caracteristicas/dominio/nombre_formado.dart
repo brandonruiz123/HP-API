@@ -5,7 +5,7 @@ class NombreFormado {
 
   NombreFormado._(this.valor);
 
-  factory NombreFormado.contructor(String propuesta) {
+  factory NombreFormado.constructor(String propuesta) {
     if (propuesta.trim().isEmpty) {
       throw NombreMalFormado();
     }
