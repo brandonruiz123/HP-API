@@ -2,12 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_estudiante.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 void main() {
   group('RepositorioEstudiante', () {
     group('pruebas offline:', () {
       test('con James Potter me devuelve un estudiante', () async {
-        RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante(rpj);
         var resultado = await rpe
             .obtenerEstudiante(NombreFormado.constructor('James Potter'));
         resultado.match((l) {
@@ -25,7 +27,8 @@ void main() {
       });
 
       test('con James Patter arroja EstudianteNoEncontrado', () async {
-        RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasEstudiante rpe = RepositorioPruebasEstudiante(rpj);
         var resultado = await rpe
             .obtenerEstudiante(NombreFormado.constructor('James Patter'));
         resultado.match((l) {
@@ -37,7 +40,8 @@ void main() {
     });
     group('pruebas online:', () {
       test('con Michael Corner me devuelve un estudiante', () async {
-        RepositorioEstudianteReal rpe = RepositorioEstudianteReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioEstudianteReal rpe = RepositorioEstudianteReal(rpj);
         var resultado = await rpe
             .obtenerEstudiante(NombreFormado.constructor('Michael Corner'));
         resultado.match((l) {
@@ -50,7 +54,8 @@ void main() {
       });
 
       test('con Miguel Corner arroja EstudianteNoEncontrado', () async {
-        RepositorioEstudianteReal rpe = RepositorioEstudianteReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioEstudianteReal rpe = RepositorioEstudianteReal(rpj);
         var resultado = await rpe
             .obtenerEstudiante(NombreFormado.constructor('Miguel Corner'));
         resultado.match((l) {

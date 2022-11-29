@@ -2,12 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_escuela.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 void main() {
   group('RepositorioEscuela', () {
     group('pruebas online:', () {
       test('Con Ron Weasley y Gryffindor devuelve un Personaje', () async {
-        RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioEscuelaReal rpe = RepositorioEscuelaReal(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Gryffindor'),
             NombreFormado.constructor('Ron Weasley'));
@@ -22,7 +24,8 @@ void main() {
       });
       test('Con Run Wisli y Gryffindor arroja EstudianteNoEncontrado',
           () async {
-        RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioEscuelaReal rpe = RepositorioEscuelaReal(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Gryffindor'),
             NombreFormado.constructor('Run Wisli'));
@@ -33,7 +36,8 @@ void main() {
         });
       });
       test('Con Ron Weasley y Greyfindor arroja EscuelaNoEncontrada', () async {
-        RepositorioEscuelaReal rpe = RepositorioEscuelaReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioEscuelaReal rpe = RepositorioEscuelaReal(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Greyfindor'),
             NombreFormado.constructor('Ron Weasley'));
@@ -46,7 +50,8 @@ void main() {
     });
     group('pruebas offline:', () {
       test('con Eloise Midgen y Gryffindor devuelve un Personaje', () async {
-        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Gryffindor'),
             NombreFormado.constructor('Eloise Midgen'));
@@ -60,7 +65,8 @@ void main() {
       });
       test('con Eluis Migen y Gryffindor arroja PersonajeNoEncontrado',
           () async {
-        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Gryffindor'),
             NombreFormado.constructor('Eluis Migen'));
@@ -72,7 +78,8 @@ void main() {
       });
       test('con Eloise Midgen y Greyfindor arroja EscuelaNoEncontrada',
           () async {
-        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasEscuela rpe = RepositorioPruebasEscuela(rpj);
         var resultado = await rpe.obtenerEscuela(
             NombreFormado.constructor('Greyfindor'),
             NombreFormado.constructor('Eluis Migen'));

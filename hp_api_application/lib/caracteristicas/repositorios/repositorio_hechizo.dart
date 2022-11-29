@@ -19,26 +19,20 @@ class RepositorioHechizoReal extends RepositorioHechizo {
 
   @override
   Future<Either<Problema, Hechizo>> obtenerHechizo(NombreFormado nombre) async {
-    try {
+    if (_listaHechizos.isEmpty) {
       var resultado = await constructor.obtenerDatos('online', _base);
       resultado.match((l) {
         return Left(l);
       }, (r) {
-        try {
-          _listaHechizos = _obtenerListaHechizos(r);
-        } catch (e) {
-          return Left(JsonMalFormado());
-        }
-        for (var i = 0; i < _listaHechizos.length; i++) {
-          if (_listaHechizos[i].nombre == nombre.valor) {
-            return Right(_listaHechizos[i]);
-          }
-        }
+        _listaHechizos = _obtenerListaHechizos(r);
       });
-    } catch (e) {
-      return Left(JsonNoEncontrado());
     }
-    return Left(HechizoMalFormado());
+    for (var i = 0; i < _listaHechizos.length; i++) {
+      if (_listaHechizos[i].nombre == nombre.valor) {
+        return Right(_listaHechizos[i]);
+      }
+    }
+    return Left(HechizoNoEncontrado());
   }
 }
 
@@ -47,21 +41,20 @@ class RepositorioPruebaHechizo extends RepositorioHechizo {
 
   @override
   Future<Either<Problema, Hechizo>> obtenerHechizo(NombreFormado nombre) async {
-    var resultado = await constructor.obtenerDatos('offline', _rutaJson);
-    resultado.match((l) {
-      return Left(l);
-    }, (r) {
-      _listaHechizos = _obtenerListaHechizos(r);
-    });
-    if (_listaHechizos.isNotEmpty) {
-      for (var i = 0; i < _listaHechizos.length; i++) {
-        if (_listaHechizos[i].nombre == nombre.valor) {
-          return Right(_listaHechizos[i]);
-        }
-      }
-      return Left(HechizoNoEncontrado());
+    if (_listaHechizos.isEmpty) {
+      var resultado = await constructor.obtenerDatos('offline', _rutaJson);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaHechizos = _obtenerListaHechizos(r);
+      });
     }
-    return Left(JsonMalFormado());
+    for (var i = 0; i < _listaHechizos.length; i++) {
+      if (_listaHechizos[i].nombre == nombre.valor) {
+        return Right(_listaHechizos[i]);
+      }
+    }
+    return Left(HechizoNoEncontrado());
   }
 }
 

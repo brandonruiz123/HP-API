@@ -10,7 +10,7 @@ void main() {
     group('pruebas online:', () {
       test('con Spongify me regresa un Hechizo', () async {
         RepositorioPruebaJson rpj = RepositorioPruebaJson();
-        RepositorioPruebaHechizo rph = RepositorioPruebaHechizo(rpj);
+        RepositorioHechizoReal rph = RepositorioHechizoReal(rpj);
         var resultado =
             await rph.obtenerHechizo(NombreFormado.constructor('Spongify'));
         resultado.match((l) {
@@ -22,7 +22,7 @@ void main() {
       });
       test('con Esponja arroja HechizoNoEncontrado', () async {
         RepositorioPruebaJson rpj = RepositorioPruebaJson();
-        RepositorioPruebaHechizo rph = RepositorioPruebaHechizo(rpj);
+        RepositorioHechizoReal rph = RepositorioHechizoReal(rpj);
         var resultado =
             await rph.obtenerHechizo(NombreFormado.constructor('Esponja'));
         resultado.match((l) {

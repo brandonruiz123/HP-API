@@ -8,7 +8,7 @@ class Hechizo {
 
   factory Hechizo.constructor(
       {required String nombre, required String descripcion}) {
-    if (nombre.trim().isEmpty) {
+    if (nombre.trim().isEmpty || descripcion.isEmpty) {
       throw HechizoMalFormado();
     }
     return Hechizo._(nombre, descripcion);

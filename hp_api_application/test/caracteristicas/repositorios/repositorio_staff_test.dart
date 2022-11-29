@@ -1,13 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_staff.dart';
 
 void main() {
   group('RepositorioStaff', () {
     group('pruebas online: ', () {
       test('con Minerva McGonagall me devuelve un Staff', () async {
-        RepositorioStaffReal rps = RepositorioStaffReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioStaffReal rps = RepositorioStaffReal(rpj);
         var resultado = await rps
             .obtenerStaff(NombreFormado.constructor('Minerva McGonagall'));
         resultado.match((l) {
@@ -21,7 +23,8 @@ void main() {
         });
       });
       test('con Minerva Mcdonalds me devuelve StaffNoEncontrado', () async {
-        RepositorioStaffReal rps = RepositorioStaffReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioStaffReal rps = RepositorioStaffReal(rpj);
         var resultado = await rps
             .obtenerStaff(NombreFormado.constructor('Minerva Mcdonalds'));
         resultado.match((l) {
@@ -33,7 +36,8 @@ void main() {
     });
     group('pruebas offline:', () {
       test('con Charity Burbage me devuelve un Staff', () async {
-        RepositorioPruebasStaff rps = RepositorioPruebasStaff();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasStaff rps = RepositorioPruebasStaff(rpj);
         var resultado = await rps
             .obtenerStaff(NombreFormado.constructor('Charity Burbage'));
         resultado.match((l) {
@@ -45,7 +49,8 @@ void main() {
         });
       });
       test('con Cheryl Barbas me devuelve StaffNoEncontrado', () async {
-        RepositorioPruebasStaff rps = RepositorioPruebasStaff();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasStaff rps = RepositorioPruebasStaff(rpj);
         var resultado =
             await rps.obtenerStaff(NombreFormado.constructor('Cheryl Barbas'));
         resultado.match((l) {
