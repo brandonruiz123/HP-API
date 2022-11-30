@@ -10,5 +10,11 @@ void main() {
       act: (bloc) => bloc.add(Creado()),
       expect: () => [isA<MostrandoMenu>()],
     );
+    blocTest<BlocVerificacion, Estado>(
+      'emits [MyState] when MyEvent is added.',
+      build: () => BlocVerificacion(),
+      act: (bloc) => bloc.add(ClickMenuPersonaje()),
+      expect: () => [isA<SolicitandoPersonaje>()],
+    );
   });
 }

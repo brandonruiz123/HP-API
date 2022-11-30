@@ -1,22 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/common_widgets.dart';
+
+import '../bloc.dart';
+
+List<Widget> loopButtons() {
+  List<Widget> listaWidgets = [];
+  for (var i = 0; i < 5; i++) {
+    switch (i) {
+      case 0:
+        listaWidgets.add(Boton(
+          texto: 'Buscar Personaje',
+          evento: ClickMenuPersonaje(),
+        ));
+        break;
+      case 1:
+        listaWidgets.add(Boton(
+          texto: 'Buscar Estudiante',
+          evento: ClickMenuEstudiante(),
+        ));
+        break;
+      case 2:
+        listaWidgets.add(Boton(
+          texto: 'Buscar Escuela',
+          evento: ClickMenuEscuela(),
+        ));
+        break;
+      case 3:
+        listaWidgets.add(Boton(
+          texto: 'Buscar Staff',
+          evento: ClickMenuStaff(),
+        ));
+        break;
+      case 4:
+        listaWidgets.add(Boton(
+          texto: 'Buscar Hechizo',
+          evento: ClickMenuHechizo(),
+        ));
+        break;
+      default:
+    }
+    listaWidgets.add(const SizedBox(
+      height: 40,
+    ));
+  }
+  return listaWidgets;
+}
 
 class VistaMostrandoMenu extends StatelessWidget {
-  const VistaMostrandoMenu ({super.key});
+  const VistaMostrandoMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HP-API',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('Menu'),),
-        ),
-        body:const Center(child: Botones(),),
-      ),
-    );
+    return const Template(texto: 'Menu', widget: Botones());
   }
 }
-
 
 class Botones extends StatelessWidget {
   const Botones({super.key});
@@ -26,41 +63,8 @@ class Botones extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [  Boton(texto: 'Boton1'),
-        Boton(texto: 'Boton2'),
-        Boton(texto: 'Boton3')
-        ],
+        children: loopButtons(),
       ),
     );
   }
 }
-
-
-class Boton extends StatelessWidget {
-  final String? texto;
-  const Boton({super.key, this.texto});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      
-      height: 25,
-      width: 100,
-      child: Padding(
-        padding: const EdgeInsets.all(2),
-        child: TextButton(
-  style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)
-  ),
-  onPressed: () { },
-  child: Center(child:Text('$texto')),
-),
-      ),
-    );
-  }
-}
-
-
-
-
