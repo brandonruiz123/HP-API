@@ -6,6 +6,8 @@ import 'package:hp_api_application/caracteristicas/dominio/personaje.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
 
+import '../repositorios/repositorio_estudiante.dart';
+
 class Estado {}
 
 class Creandose extends Estado {}
@@ -21,7 +23,10 @@ class MostrandoPersonaje extends Estado {
 
 class SolicitandoEstudiante extends Estado {}
 
-class MostrandoEstudiante extends Estado {}
+class MostrandoEstudiante extends Estado {
+  Personaje p;
+  MostrandoEstudiante(this.p);
+}
 
 class SolicitandoEscuela extends Estado {}
 
@@ -51,7 +56,10 @@ class PersonajeSolicitado extends Evento {
 
 class ClickMenuEstudiante extends Evento {}
 
-class EstudianteSolicitado extends Evento {}
+class EstudianteSolicitado extends Evento {
+  NombreFormado nombre;
+  EstudianteSolicitado(this.nombre);
+}
 
 class ClickMenuEscuela extends Evento {}
 
@@ -67,6 +75,10 @@ class HechizoSolicitado extends Evento {}
 
 class ClickRegresar extends Evento {}
 
+RepositorioPruebaJson _rpj = RepositorioPruebaJson();
+RepositorioPersonajeReal _rp = RepositorioPersonajeReal(_rpj);
+RepositorioEstudianteReal _rpe = RepositorioEstudianteReal(_rpj);
+
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
     on<Creado>((event, emit) {
@@ -79,9 +91,7 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
       emit(SolicitandoPersonaje());
     });
     on<PersonajeSolicitado>((event, emit) async {
-      RepositorioPruebaJson rpj = RepositorioPruebaJson();
-      RepositorioPersonajeReal rp = RepositorioPersonajeReal(rpj);
-      var resultado = await rp.obtenerPersonaje(event.nombre);
+      var resultado = await _rp.obtenerPersonaje(event.nombre);
       resultado.match((l) {
         emit(MostrandoError(mensaje: l.toString()));
       }, (r) {
@@ -90,6 +100,14 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
     });
     on<ClickMenuEstudiante>((event, emit) {
       emit(SolicitandoEstudiante());
+    });
+    on<EstudianteSolicitado>((event, emit) async {
+      var resultado = await _rpe.obtenerEstudiante(event.nombre);
+      resultado.match((l) {
+        emit(MostrandoError(mensaje: l.toString()));
+      }, (r) {
+        emit(MostrandoEstudiante(r));
+      });
     });
     on<ClickMenuEscuela>((event, emit) {
       emit(SolicitandoEscuela());
