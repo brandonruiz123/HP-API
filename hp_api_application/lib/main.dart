@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
-import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_primera_pantalla.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_menu.dart';
 import 'caracteristicas/verificaciones/vistas/vista_creandose.dart';
 
 void main() {
@@ -39,8 +39,8 @@ class Aplicacion extends StatelessWidget {
           if (estado is Creandose) {
             return const VistaCreandose();
           }
-          if (estado is PrimeraPantalla) {
-            return const VistaPrimeraPantalla();
+          if (estado is MostrandoMenu) {
+            return const VistaMostrandoMenu();
           }
           return const Center(child: Text('Error 404'));
         }),

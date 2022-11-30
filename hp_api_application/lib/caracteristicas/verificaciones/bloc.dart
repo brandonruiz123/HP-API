@@ -6,16 +6,27 @@ class Estado {}
 
 class Creandose extends Estado {}
 
-class PrimeraPantalla extends Estado {}
+class MostrandoMenu extends Estado{}
+
+class SolicitandoPersonaje extends Estado {}
+
+class MostrandoPersonaje extends Estado {}
 
 class Evento {}
 
 class Creado extends Evento {}
 
+class ClickMenuPersonaje extends Evento{}
+
+class PersonajeSolicitado extends Evento{}
+
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
     on<Creado>((event, emit) {
-      emit(PrimeraPantalla());
+      emit(MostrandoMenu());
+    });
+    on<ClickMenuPersonaje>((event, emit) {
+      emit(SolicitandoPersonaje());
     });
   }
 }
