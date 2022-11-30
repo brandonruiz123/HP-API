@@ -103,6 +103,9 @@ List<Personaje> _obtenerListaPersonajes(List<dynamic> json) {
     _actoresAlt = json[i]['alternate_actors'];
     _vive = json[i]['alive'];
     _imagen = json[i]['image'];
+    if (json[i]['image'].toString().contains('herokuapp')) {
+      _imagen = json[i]['image'].toString().replaceAll('herokuapp', 'onrender');
+    }
     p = Personaje.constructor(
         nombre: _nombrejson,
         actor: _actor,

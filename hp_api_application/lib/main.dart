@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_error.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_menu.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_personaje.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_solicitando_personaje.dart';
 import 'caracteristicas/verificaciones/vistas/vista_creandose.dart';
 
@@ -45,6 +47,12 @@ class Aplicacion extends StatelessWidget {
           }
           if (estado is SolicitandoPersonaje) {
             return const VistaSolicitandoPersonaje();
+          }
+          if (estado is MostrandoPersonaje) {
+            return VistaMostrandoPersonaje(p: estado.p);
+          }
+          if (estado is MostrandoError) {
+            return VistaMostrandoError(mensaje: estado.mensaje);
           }
           return const Center(child: Text('Error 404'));
         }),

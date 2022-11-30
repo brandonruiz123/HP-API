@@ -55,8 +55,8 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
                     ? null
                     : Boton(
                         texto: 'Busca Personaje',
-                        evento: PersonajeSolicitado())),
-            Text(controlador.text),
+                        evento: PersonajeSolicitado(
+                            NombreFormado.constructor(controlador.text)))),
           ],
         ),
       ),
