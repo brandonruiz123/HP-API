@@ -52,7 +52,7 @@ class RepositorioStaffReal extends RepositorioStaff {
       if (_listaStaff[i].varitaHowarts == false) {
         return Left(NoEsStaff());
       }
-      if (_listaStaff[i].nombre == nombre.valor) {
+      if (_listaStaff[i].nombre.toLowerCase() == nombre.valor.toLowerCase()) {
         return Right(_listaStaff[i]);
       }
     }
@@ -77,7 +77,7 @@ class RepositorioPruebasStaff extends RepositorioStaff {
       if (_listaStaff[i].varitaHowarts == false) {
         return Left(NoEsStaff());
       }
-      if (_listaStaff[i].nombre == nombre.valor) {
+      if (_listaStaff[i].nombre.toLowerCase() == nombre.valor.toLowerCase()) {
         return Right(_listaStaff[i]);
       }
     }

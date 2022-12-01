@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/common_widgets.dart';

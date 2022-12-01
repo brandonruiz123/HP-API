@@ -6,9 +6,11 @@ import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_m
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_estudiante.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_menu.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_personaje.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_staff.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_solicitando_estudiante.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_solicitando_escuela.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_solicitando_personaje.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_solicitando_staff.dart';
 import 'caracteristicas/verificaciones/vistas/vista_creandose.dart';
 
 void main() {
@@ -66,6 +68,12 @@ class Aplicacion extends StatelessWidget {
           }
           if (estado is MostrandoEscuela) {
             return VistaMostrandoEscuela(p: estado.p);
+          }
+          if (estado is SolicitandoStaff) {
+            return const VistaSolicitandoStaff();
+          }
+          if (estado is MostrandoStaff) {
+            return VistaMostrandoStaff(p: estado.p);
           }
           if (estado is MostrandoError) {
             return VistaMostrandoError(mensaje: estado.mensaje);

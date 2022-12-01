@@ -6,6 +6,7 @@ import 'package:hp_api_application/caracteristicas/dominio/personaje.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_escuela.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_staff.dart';
 
 import '../repositorios/repositorio_estudiante.dart';
 
@@ -38,7 +39,10 @@ class MostrandoEscuela extends Estado {
 
 class SolicitandoStaff extends Estado {}
 
-class MostrandoStaff extends Estado {}
+class MostrandoStaff extends Estado {
+  Personaje p;
+  MostrandoStaff(this.p);
+}
 
 class SolicitandoHechizo extends Estado {}
 
@@ -75,7 +79,10 @@ class EscuelaSolicitada extends Evento {
 
 class ClickMenuStaff extends Evento {}
 
-class StaffSolicitado extends Evento {}
+class StaffSolicitado extends Evento {
+  NombreFormado nombre;
+  StaffSolicitado(this.nombre);
+}
 
 class ClickMenuHechizo extends Evento {}
 
@@ -87,6 +94,7 @@ RepositorioPruebaJson _rpj = RepositorioPruebaJson();
 RepositorioPersonajeReal _rp = RepositorioPersonajeReal(_rpj);
 RepositorioEstudianteReal _rpe = RepositorioEstudianteReal(_rpj);
 RepositorioEscuelaReal _rpes = RepositorioEscuelaReal(_rpj);
+RepositorioStaffReal _rps = RepositorioStaffReal(_rpj);
 
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
@@ -131,6 +139,14 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
     });
     on<ClickMenuStaff>((event, emit) {
       emit(SolicitandoStaff());
+    });
+    on<StaffSolicitado>((event, emit) async {
+      var resultado = await _rps.obtenerStaff(event.nombre);
+      resultado.match((l) {
+        emit(MostrandoError(mensaje: l.toString()));
+      }, (r) {
+        emit(MostrandoStaff(r));
+      });
     });
     on<ClickMenuHechizo>((event, emit) {
       emit(SolicitandoHechizo());

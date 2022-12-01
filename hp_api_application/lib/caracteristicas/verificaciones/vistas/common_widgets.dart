@@ -41,7 +41,7 @@ List<Widget> muestraDatos(Personaje p) {
       String nucleoV = p.varita!['core'].toString();
       listaWidget.add(Texto(atributo: 'nucleo varita', valor: nucleoV));
     }
-    if (p.varita!['length'].toString() != '') {
+    if (p.varita!['length'].toString() != 'null') {
       String largoV = p.varita!['length'].toString();
       listaWidget.add(Texto(atributo: 'largo varita', valor: largoV));
     }
