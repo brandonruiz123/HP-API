@@ -53,7 +53,8 @@ class RepositorioEstudianteReal extends RepositorioEstudiante {
       if (_listaEstudiantes[i].estudianteHowarts == false) {
         return Left(NoEsEstudiante());
       }
-      if (_listaEstudiantes[i].nombre == nombre.valor) {
+      if (_listaEstudiantes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaEstudiantes[i]);
       }
     }
@@ -80,7 +81,8 @@ class RepositorioPruebasEstudiante extends RepositorioEstudiante {
       if (_listaEstudiantes[i].estudianteHowarts == false) {
         return Left(NoEsEstudiante());
       }
-      if (_listaEstudiantes[i].nombre == nombre.valor) {
+      if (_listaEstudiantes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaEstudiantes[i]);
       }
     }
@@ -111,6 +113,9 @@ List<Personaje> _obtenerListaEstudiantes(List<dynamic> json) {
     _actoresAlt = json[i]['alternate_actors'];
     _vive = json[i]['alive'];
     _imagen = json[i]['image'];
+    if (json[i]['image'].toString().contains('herokuapp')) {
+      _imagen = json[i]['image'].toString().replaceAll('herokuapp', 'onrender');
+    }
     p = Personaje.constructor(
         nombre: _nombrejson,
         actor: _actor,
