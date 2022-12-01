@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/common_widgets.dart';
 
@@ -16,8 +17,7 @@ class VistaMostrandoError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Template(
-        texto: 'Error...', widget: generaError(mensaje: '$mensaje'));
+    return Template(texto: '¡Error!', widget: generaError(mensaje: '$mensaje'));
   }
 }
 
@@ -30,7 +30,14 @@ class TextoError extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('$mensaje'),
+        Text(
+            style: const TextStyle(
+                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+            'Excepción: $mensaje'),
+        SizedBox(
+          height: (MediaQuery.of(context).size.width) / 8,
+          width: (MediaQuery.of(context).size.width) / 8,
+        ),
         Boton(texto: 'Regresar', evento: ClickRegresar())
       ],
     );
