@@ -49,7 +49,9 @@ class _VistaSolicitandoEscuelaState extends State<VistaSolicitandoEscuela> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
+            // ignore: prefer_const_constructors
+            Text(
+                // ignore: prefer_const_constructors
                 style: TextStyle(fontWeight: FontWeight.bold),
                 'Escribe el nombre del Personaje'),
             TextField(

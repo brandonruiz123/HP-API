@@ -45,14 +45,12 @@ class RepositorioEscuelaReal extends RepositorioEscuela {
     String valorEscuela = escuela.valor.toLowerCase();
     String base =
         'https://hp-api.onrender.com/api/characters/house/$valorEscuela';
-    if (_listaEscuelas.isEmpty) {
-      var resultado = await constructor.obtenerDatos('online', base);
-      resultado.match((l) {
-        return Left(l);
-      }, (r) {
-        _listaEscuelas = _obtenerListaEscuelas(r);
-      });
-    }
+    var resultado = await constructor.obtenerDatos('online', base);
+    resultado.match((l) {
+      return Left(l);
+    }, (r) {
+      _listaEscuelas = _obtenerListaEscuelas(r);
+    });
     for (var i = 0; i < _listaEscuelas.length; i++) {
       if (_listaEscuelas[i].escuela!.toLowerCase() !=
           escuela.valor.toLowerCase()) {
@@ -73,15 +71,12 @@ class RepositorioPruebasEscuela extends RepositorioEscuela {
   @override
   Future<Either<Problema, Personaje>> obtenerEscuela(
       NombreFormado escuela, NombreFormado nombre) async {
-    if (_listaEscuelas.isEmpty) {
-      var resultado =
-          await constructor.obtenerDatos('offline', _jsonGryffindor);
-      resultado.match((l) {
-        return Left(l);
-      }, (r) {
-        _listaEscuelas = _obtenerListaEscuelas(r);
-      });
-    }
+    var resultado = await constructor.obtenerDatos('offline', _jsonGryffindor);
+    resultado.match((l) {
+      return Left(l);
+    }, (r) {
+      _listaEscuelas = _obtenerListaEscuelas(r);
+    });
     for (var i = 0; i < _listaEscuelas.length; i++) {
       if (_listaEscuelas[i].escuela!.toLowerCase() !=
           escuela.valor.toLowerCase()) {
