@@ -111,16 +111,16 @@ class Template extends StatelessWidget {
             child: Text(texto),
           ),
         ),
-        body: Center(child: Flexible(child: widget)),
+        body: Center(child: widget),
       ),
     );
   }
 }
 
-class Boton extends StatelessWidget {
+class Botonn extends StatelessWidget {
   final String? texto;
   final Evento evento;
-  const Boton({super.key, this.texto, required this.evento});
+  const Botonn({super.key, this.texto, required this.evento});
 
   @override
   Widget build(BuildContext context) {
@@ -140,10 +140,10 @@ class Boton extends StatelessWidget {
   }
 }
 
-class Botonn extends StatelessWidget {
+class Boton extends StatelessWidget {
   final String? texto;
   final Evento evento;
-  const Botonn({super.key, this.texto, required this.evento});
+  const Boton({super.key, this.texto, required this.evento});
 
   @override
   Widget build(BuildContext context) {

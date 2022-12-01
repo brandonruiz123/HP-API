@@ -60,11 +60,9 @@ class Botones extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: loopButtons(),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: loopButtons(),
     );
   }
 }
