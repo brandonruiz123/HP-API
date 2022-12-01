@@ -36,7 +36,10 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
         width: (MediaQuery.of(context).size.width) / 3,
         child: Column(
           children: [
-            const Text("Escribe algo"),
+            // ignore: prefer_const_constructors
+            Text(
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                'Escribe el nombre del personaje'),
             TextField(
               controller: controlador,
             ),
@@ -74,50 +77,3 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
     });
   }
 }
-
-// class VistaSolicitandoPersonaje extends StatelessWidget {
-//   const VistaSolicitandoPersonaje({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Template(texto: 'Busca Personaje', widget: Prueba());
-//   }
-// }
-
-// class Prueba extends StatelessWidget {
-//   TextEditingController controlador;
-//   bool _usuarioValidado = false;
-//   const Prueba({Key? key, required this.controlador}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: (MediaQuery.of(context).size.width) / 3,
-//       width: (MediaQuery.of(context).size.width) / 3,
-//       child: Column(
-//         children: [
-//           const Text("Escribe algo"),
-//           TextField(
-//             controller: controlador,
-//           ),
-//           const SizedBox(
-//             height: 10,
-//           ),
-//           Container(
-//               child: _usuarioValidado
-//                   ? null
-//                   : const BotonConFn(
-//                       texto: 'Busca Personaje',
-//                       funcion: null,
-//                     )),
-//           Container(
-//               child: !_usuarioValidado
-//                   ? null
-//                   : Boton(
-//                       texto: 'Busca Personaje', evento: PersonajeSolicitado())),
-//           Text(controlador.text),
-//         ],
-//       ),
-//     );
-//   }
-// }
