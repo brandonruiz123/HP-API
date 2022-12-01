@@ -54,10 +54,12 @@ class RepositorioEscuelaReal extends RepositorioEscuela {
       });
     }
     for (var i = 0; i < _listaEscuelas.length; i++) {
-      if (_listaEscuelas[i].escuela != escuela.valor) {
+      if (_listaEscuelas[i].escuela!.toLowerCase() !=
+          escuela.valor.toLowerCase()) {
         return Left(EscuelaNoEncontrada());
       }
-      if (_listaEscuelas[i].nombre == nombre.valor) {
+      if (_listaEscuelas[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaEscuelas[i]);
       }
     }
@@ -81,10 +83,12 @@ class RepositorioPruebasEscuela extends RepositorioEscuela {
       });
     }
     for (var i = 0; i < _listaEscuelas.length; i++) {
-      if (_listaEscuelas[i].escuela != escuela.valor) {
+      if (_listaEscuelas[i].escuela!.toLowerCase() !=
+          escuela.valor.toLowerCase()) {
         return Left(EscuelaNoEncontrada());
       }
-      if (_listaEscuelas[i].nombre == nombre.valor) {
+      if (_listaEscuelas[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaEscuelas[i]);
       }
     }

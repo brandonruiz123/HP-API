@@ -3,6 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/personaje.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_escuela.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
 
@@ -30,7 +31,10 @@ class MostrandoEstudiante extends Estado {
 
 class SolicitandoEscuela extends Estado {}
 
-class MostrandoEscuela extends Estado {}
+class MostrandoEscuela extends Estado {
+  Personaje p;
+  MostrandoEscuela(this.p);
+}
 
 class SolicitandoStaff extends Estado {}
 
@@ -63,7 +67,11 @@ class EstudianteSolicitado extends Evento {
 
 class ClickMenuEscuela extends Evento {}
 
-class EscuelaSolicitada extends Evento {}
+class EscuelaSolicitada extends Evento {
+  NombreFormado escuela;
+  NombreFormado nombre;
+  EscuelaSolicitada({required this.escuela, required this.nombre});
+}
 
 class ClickMenuStaff extends Evento {}
 
@@ -78,6 +86,7 @@ class ClickRegresar extends Evento {}
 RepositorioPruebaJson _rpj = RepositorioPruebaJson();
 RepositorioPersonajeReal _rp = RepositorioPersonajeReal(_rpj);
 RepositorioEstudianteReal _rpe = RepositorioEstudianteReal(_rpj);
+RepositorioEscuelaReal _rpes = RepositorioEscuelaReal(_rpj);
 
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
@@ -111,6 +120,14 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
     });
     on<ClickMenuEscuela>((event, emit) {
       emit(SolicitandoEscuela());
+    });
+    on<EscuelaSolicitada>((event, emit) async {
+      var resultado = await _rpes.obtenerEscuela(event.escuela, event.nombre);
+      resultado.match((l) {
+        emit(MostrandoError(mensaje: l.toString()));
+      }, (r) {
+        emit(MostrandoEscuela(r));
+      });
     });
     on<ClickMenuStaff>((event, emit) {
       emit(SolicitandoStaff());
