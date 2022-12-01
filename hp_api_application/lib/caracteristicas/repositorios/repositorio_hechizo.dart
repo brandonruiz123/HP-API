@@ -28,7 +28,8 @@ class RepositorioHechizoReal extends RepositorioHechizo {
       });
     }
     for (var i = 0; i < _listaHechizos.length; i++) {
-      if (_listaHechizos[i].nombre == nombre.valor) {
+      if (_listaHechizos[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaHechizos[i]);
       }
     }

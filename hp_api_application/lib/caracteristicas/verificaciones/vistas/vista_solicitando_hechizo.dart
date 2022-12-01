@@ -3,15 +3,15 @@ import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/common_widgets.dart';
 
-class VistaSolicitandoPersonaje extends StatefulWidget {
-  const VistaSolicitandoPersonaje({Key? key}) : super(key: key);
+class VistaSolicitandoHechizo extends StatefulWidget {
+  const VistaSolicitandoHechizo({Key? key}) : super(key: key);
 
   @override
-  State<VistaSolicitandoPersonaje> createState() =>
-      _VistaSolicitandoPersonajeState();
+  State<VistaSolicitandoHechizo> createState() =>
+      _VistaSolicitandoHechizoState();
 }
 
-class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
+class _VistaSolicitandoHechizoState extends State<VistaSolicitandoHechizo> {
   bool _usuarioValidado = false;
   late final TextEditingController controlador;
 
@@ -30,7 +30,7 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
   @override
   Widget build(BuildContext context) {
     return Template(
-      texto: 'Busca Personaje',
+      texto: 'Busca Hechizo',
       widget: SizedBox(
         height: (MediaQuery.of(context).size.width) / 3,
         width: (MediaQuery.of(context).size.width) / 3,
@@ -39,7 +39,7 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
             // ignore: prefer_const_constructors
             Text(
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                'Escribe el nombre del personaje'),
+                'Escribe el nombre del Hechizo'),
             TextField(
               controller: controlador,
             ),
@@ -50,15 +50,15 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
                 child: _usuarioValidado
                     ? null
                     : const BotonConFn(
-                        texto: 'Busca Personaje',
+                        texto: 'Busca Hechizo',
                         funcion: null,
                       )),
             Container(
                 child: !_usuarioValidado
                     ? null
                     : Boton(
-                        texto: 'Busca Personaje',
-                        evento: PersonajeSolicitado(
+                        texto: 'Busca Hechizo',
+                        evento: HechizoSolicitado(
                             NombreFormado.constructor(controlador.text)))),
             const SizedBox(height: 10),
             Boton(texto: 'Regresar', evento: ClickRegresar()),

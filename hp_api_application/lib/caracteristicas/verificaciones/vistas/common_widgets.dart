@@ -179,3 +179,14 @@ class Texto2 extends StatelessWidget {
     );
   }
 }
+
+class Texto3 extends StatelessWidget {
+  final String atributo;
+  final String valor;
+  const Texto3({super.key, required this.atributo, required this.valor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$atributo: $valor');
+  }
+}

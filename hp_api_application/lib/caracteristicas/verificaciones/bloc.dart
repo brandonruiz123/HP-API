@@ -1,9 +1,11 @@
 //Aqui tendremos los estados y eventos de la apliación
 
 import 'package:bloc/bloc.dart';
+import 'package:hp_api_application/caracteristicas/dominio/hechizo.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/personaje.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_escuela.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_hechizo.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_staff.dart';
@@ -42,6 +44,11 @@ class SolicitandoStaff extends Estado {}
 class MostrandoStaff extends Estado {
   Personaje p;
   MostrandoStaff(this.p);
+}
+
+class MostrandoHechizo extends Estado {
+  Hechizo h;
+  MostrandoHechizo(this.h);
 }
 
 class SolicitandoHechizo extends Estado {}
@@ -86,7 +93,10 @@ class StaffSolicitado extends Evento {
 
 class ClickMenuHechizo extends Evento {}
 
-class HechizoSolicitado extends Evento {}
+class HechizoSolicitado extends Evento {
+  NombreFormado nombre;
+  HechizoSolicitado(this.nombre);
+}
 
 class ClickRegresar extends Evento {}
 
@@ -95,6 +105,7 @@ RepositorioPersonajeReal _rp = RepositorioPersonajeReal(_rpj);
 RepositorioEstudianteReal _rpe = RepositorioEstudianteReal(_rpj);
 RepositorioEscuelaReal _rpes = RepositorioEscuelaReal(_rpj);
 RepositorioStaffReal _rps = RepositorioStaffReal(_rpj);
+RepositorioHechizoReal _rph = RepositorioHechizoReal(_rpj);
 
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
@@ -150,6 +161,14 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
     });
     on<ClickMenuHechizo>((event, emit) {
       emit(SolicitandoHechizo());
+    });
+    on<HechizoSolicitado>((event, emit) async {
+      var resultado = await _rph.obtenerHechizo(event.nombre);
+      resultado.match((l) {
+        emit(MostrandoError(mensaje: l.toString()));
+      }, (r) {
+        emit(MostrandoHechizo(r));
+      });
     });
   }
 }
