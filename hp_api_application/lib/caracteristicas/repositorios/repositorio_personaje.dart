@@ -49,7 +49,8 @@ class RepositorioPersonajeReal extends RepositorioPersonaje {
       });
     }
     for (var i = 0; i < _listaPersonajes.length; i++) {
-      if (_listaPersonajes[i].nombre == nombre.valor) {
+      if (_listaPersonajes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaPersonajes[i]);
       }
     }
@@ -72,7 +73,8 @@ class RepositorioPruebasPersonaje extends RepositorioPersonaje {
       });
     }
     for (var i = 0; i < _listaPersonajes.length; i++) {
-      if (_listaPersonajes[i].nombre == nombre.valor) {
+      if (_listaPersonajes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaPersonajes[i]);
       }
     }

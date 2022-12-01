@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:hp_api_application/caracteristicas/verificaciones/bloc.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/common_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -23,16 +22,12 @@ class VistaMostrandoPersonaje extends StatelessWidget {
   Widget build(BuildContext context) {
     return Template(
       texto: 'Personaje Encontrado',
-      widget: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(p.nombre),
-          const SizedBox(height: 30),
-          Boton(
-            texto: 'Regresar',
-            evento: ClickRegresar(),
-          )
-        ],
+      widget: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: muestraDatos(p),
+          // children: Expanded(child: ListView(children: muestraDatos(p).map().toList()),
+        ),
       ),
     );
   }
