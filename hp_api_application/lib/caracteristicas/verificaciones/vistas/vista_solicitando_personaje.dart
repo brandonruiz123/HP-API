@@ -60,6 +60,8 @@ class _VistaSolicitandoPersonajeState extends State<VistaSolicitandoPersonaje> {
                         texto: 'Busca Personaje',
                         evento: PersonajeSolicitado(
                             NombreFormado.constructor(controlador.text)))),
+                            SizedBox(height: 10),
+            Boton(texto: 'Regresar', evento: ClickRegresar()),
           ],
         ),
       ),

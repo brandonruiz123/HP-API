@@ -77,6 +77,8 @@ class _VistaSolicitandoEscuelaState extends State<VistaSolicitandoEscuela> {
                                 NombreFormado.constructor(controlador1.text),
                             nombre:
                                 NombreFormado.constructor(controlador2.text)))),
+            const SizedBox(height: 10),
+            Boton(texto: 'Regresar', evento: ClickRegresar()),
           ],
         ),
       ),

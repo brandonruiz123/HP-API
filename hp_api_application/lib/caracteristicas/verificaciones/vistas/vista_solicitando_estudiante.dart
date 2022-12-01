@@ -61,6 +61,8 @@ class _VistaSolicitandoEstudianteState
                         texto: 'Busca Estudiante',
                         evento: EstudianteSolicitado(
                             NombreFormado.constructor(controlador.text)))),
+            const SizedBox(height: 10),
+            Boton(texto: 'Regresar', evento: ClickRegresar()),
           ],
         ),
       ),

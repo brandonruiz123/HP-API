@@ -59,6 +59,8 @@ class _VistaSolicitandoStaffState extends State<VistaSolicitandoStaff> {
                         texto: 'Busca Staff',
                         evento: StaffSolicitado(
                             NombreFormado.constructor(controlador.text)))),
+            const SizedBox(height: 10),
+            Boton(texto: 'Regresar', evento: ClickRegresar()),
           ],
         ),
       ),
