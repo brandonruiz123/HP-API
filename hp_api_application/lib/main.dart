@@ -5,6 +5,7 @@ import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_m
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_escuela.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_estudiante.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_hechizo.dart';
+import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_hechizos.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_menu.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_personaje.dart';
 import 'package:hp_api_application/caracteristicas/verificaciones/vistas/vista_mostrando_staff.dart';
@@ -82,6 +83,9 @@ class Aplicacion extends StatelessWidget {
           }
           if (estado is MostrandoHechizo) {
             return VistaMostrandoHechizo(hechizo: estado.h);
+          }
+          if (estado is MostrandoHechizos) {
+            return VistaMostrandoHechizos(listaH: estado.listaH);
           }
           if (estado is MostrandoError) {
             return VistaMostrandoError(mensaje: estado.mensaje);

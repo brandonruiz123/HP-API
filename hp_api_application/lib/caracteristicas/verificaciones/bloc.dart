@@ -11,6 +11,7 @@ import 'package:hp_api_application/caracteristicas/repositorios/repositorio_pers
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_staff.dart';
 
 import '../repositorios/repositorio_estudiante.dart';
+import '../repositorios/repositorio_hechizos.dart';
 
 class Estado {}
 
@@ -52,6 +53,11 @@ class MostrandoHechizo extends Estado {
 }
 
 class SolicitandoHechizo extends Estado {}
+
+class MostrandoHechizos extends Estado {
+  List<Hechizo> listaH;
+  MostrandoHechizos(this.listaH);
+}
 
 class MostrandoError extends Estado {
   String? mensaje;
@@ -98,6 +104,8 @@ class HechizoSolicitado extends Evento {
   HechizoSolicitado(this.nombre);
 }
 
+class ClickMenuHechizos extends Evento {}
+
 class ClickRegresar extends Evento {}
 
 RepositorioPruebaJson _rpj = RepositorioPruebaJson();
@@ -106,6 +114,7 @@ RepositorioEstudianteReal _rpe = RepositorioEstudianteReal(_rpj);
 RepositorioEscuelaReal _rpes = RepositorioEscuelaReal(_rpj);
 RepositorioStaffReal _rps = RepositorioStaffReal(_rpj);
 RepositorioHechizoReal _rph = RepositorioHechizoReal(_rpj);
+RepositorioHechizosReal _rphs = RepositorioHechizosReal(_rpj);
 
 class BlocVerificacion extends Bloc<Evento, Estado> {
   BlocVerificacion() : super(Creandose()) {
@@ -168,6 +177,14 @@ class BlocVerificacion extends Bloc<Evento, Estado> {
         emit(MostrandoError(mensaje: l.toString()));
       }, (r) {
         emit(MostrandoHechizo(r));
+      });
+    });
+    on<ClickMenuHechizos>((event, emit) async {
+      var resultado = await _rphs.obtenerHechizos();
+      resultado.match((l) {
+        emit(MostrandoError(mensaje: l.toString()));
+      }, (r) {
+        emit(MostrandoHechizos(r));
       });
     });
   }

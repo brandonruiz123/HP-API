@@ -5,7 +5,7 @@ import '../bloc.dart';
 
 List<Widget> loopButtons() {
   List<Widget> listaWidgets = [];
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 6; i++) {
     switch (i) {
       case 0:
         listaWidgets.add(Boton(
@@ -37,7 +37,12 @@ List<Widget> loopButtons() {
           evento: ClickMenuHechizo(),
         ));
         break;
-      default:
+      case 5:
+        listaWidgets.add(Boton(
+          texto: 'Muestra Hechizos',
+          evento: ClickMenuHechizos(),
+        ));
+        break;
     }
     listaWidgets.add(const SizedBox(
       height: 40,
