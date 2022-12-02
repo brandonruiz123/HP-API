@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,19 +20,28 @@ List<Widget> muestraDatos(Personaje p) {
       }
     }
   }
-  listaWidget.add(Texto(atributo: 'especie', valor: p.especie.toString()));
-  listaWidget.add(Texto(atributo: 'genero', valor: p.genero.toString()));
-  listaWidget.add(Texto(atributo: 'escuela', valor: p.escuela.toString()));
-  listaWidget.add(
-      Texto(atributo: 'fecha de nacimiento', valor: p.fechaNac.toString()));
-  listaWidget
-      .add(Texto(atributo: 'año de nacimiento', valor: p.anioNac.toString()));
+  if (p.especie.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'especie', valor: p.especie.toString()));
+  if (p.genero.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'genero', valor: p.genero.toString()));
+  if (p.escuela.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'escuela', valor: p.escuela.toString()));
+  if (p.fechaNac.toString().isNotEmpty)
+    listaWidget.add(
+        Texto(atributo: 'fecha de nacimiento', valor: p.fechaNac.toString()));
+  if (p.anioNac != null) {
+    listaWidget
+        .add(Texto(atributo: 'año de nacimiento', valor: p.anioNac.toString()));
+  }
   listaWidget.add(Texto(atributo: 'es mago', valor: p.mago.toString()));
-  listaWidget.add(Texto(atributo: 'ancestro', valor: p.ancestro.toString()));
-  listaWidget
-      .add(Texto(atributo: 'color de ojos', valor: p.colorOjos.toString()));
-  listaWidget.add(
-      Texto(atributo: 'color de cabello', valor: p.colorCabello.toString()));
+  if (p.ancestro.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'ancestro', valor: p.ancestro.toString()));
+  if (p.colorOjos.toString().isNotEmpty)
+    listaWidget
+        .add(Texto(atributo: 'color de ojos', valor: p.colorOjos.toString()));
+  if (p.colorCabello.toString().isNotEmpty)
+    listaWidget.add(
+        Texto(atributo: 'color de cabello', valor: p.colorCabello.toString()));
 
   if (p.varita != null) {
     if (p.varita!['wood'].toString() != '') {
@@ -46,12 +57,14 @@ List<Widget> muestraDatos(Personaje p) {
       listaWidget.add(Texto(atributo: 'largo varita', valor: largoV));
     }
   }
-  listaWidget.add(Texto(atributo: 'patronus', valor: p.patronus!.toString()));
+  if (p.patronus.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'patronus', valor: p.patronus!.toString()));
   listaWidget.add(Texto(
       atributo: 'estudiante hogwarts', valor: p.estudianteHowarts!.toString()));
   listaWidget.add(
       Texto(atributo: 'staff hogwarts', valor: p.varitaHowarts!.toString()));
-  listaWidget.add(Texto(atributo: 'actor', valor: p.actor!.toString()));
+  if (p.actor.toString().isNotEmpty)
+    listaWidget.add(Texto(atributo: 'actor', valor: p.actor!.toString()));
   if (p.actoresAlt != null) {
     if (p.actoresAlt!.isNotEmpty) {
       for (var i = 0; i < p.nombresAlt!.length; i++) {
