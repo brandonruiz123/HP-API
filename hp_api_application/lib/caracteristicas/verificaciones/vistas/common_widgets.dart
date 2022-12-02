@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,15 +75,16 @@ List<Widget> muestraDatos(Personaje p) {
     }
   }
   listaWidget.add(Texto(atributo: 'vive', valor: p.vive.toString()));
+  if (p.imagen!.isNotEmpty) {
+    var widget = CachedNetworkImage(
+      imageUrl: p.imagen!.toString(),
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
+    listaWidget.add(widget);
+  }
   listaWidget.add(const SizedBox(height: 30));
-  // if (p.imagen != '') {
-  // var widget = CachedNetworkImage(
-  //   imageUrl: p.imagen!.toString(),
-  //   placeholder: (context, url) => const CircularProgressIndicator(),
-  //   errorWidget: (context, url, error) => const Icon(Icons.error),
-  // );
-  // listaWidget.add(Texto2(atributo: 'imagen ', widget: widget));
-  // }
+
   listaWidget.add(Boton(
     texto: 'Regresar',
     evento: ClickRegresar(),
@@ -183,6 +185,7 @@ class Texto2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Text('$atributo: '),
