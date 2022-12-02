@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 import '../dominio/personaje.dart';
 import '../dominio/problema.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 
 String _nombrejson = '';
 List<dynamic>? _nombresAlt;
@@ -28,45 +25,40 @@ List<dynamic>? _actoresAlt;
 bool? _vive;
 String? _imagen;
 
-String jsonGryffindor = './lib/caracteristicas/datos/datos_gryffindor.json';
+String _jsonGryffindor = './lib/caracteristicas/datos/datos_gryffindor.json';
 List<dynamic> json = [];
-List<Personaje> listaEscuelas = [];
+List<Personaje> _listaEscuelas = [];
 
 abstract class RepositorioEscuela {
+  late RepositorioPruebaJson constructor;
+  RepositorioEscuela(this.constructor);
   Future<Either<Problema, Personaje>> obtenerEscuela(
       NombreFormado escuela, NombreFormado nombre);
 }
 
 class RepositorioEscuelaReal extends RepositorioEscuela {
+  RepositorioEscuelaReal(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerEscuela(
       NombreFormado escuela, NombreFormado nombre) async {
     String valorEscuela = escuela.valor.toLowerCase();
     String base =
         'https://hp-api.onrender.com/api/characters/house/$valorEscuela';
-    if (listaEscuelas.isEmpty) {
-      //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(base);
-      final respuesta = await http.get(direccion);
-      if (respuesta.statusCode != 200) {
-        return left(ErrorDeConexion());
-      }
-      //si no hubo problema al recibir la respuesta, esta se guarda
-      json = jsonDecode(respuesta.body);
-      //se obtiene la lista de los personajes
-      try {
-        listaEscuelas = obtenerListaEscuelas(json);
-      } catch (e) {
-        return Left(JsonMalFormado());
-      }
-    }
-    //si la lista no esta vacia no consume la api y solo busca el personaje
-    for (var i = 0; i < listaEscuelas.length; i++) {
-      if (listaEscuelas[i].escuela != escuela.valor) {
+    var resultado = await constructor.obtenerDatos('online', base);
+    resultado.match((l) {
+      return Left(l);
+    }, (r) {
+      _listaEscuelas = _obtenerListaEscuelas(r);
+    });
+    for (var i = 0; i < _listaEscuelas.length; i++) {
+      if (_listaEscuelas[i].escuela!.toLowerCase() !=
+          escuela.valor.toLowerCase()) {
         return Left(EscuelaNoEncontrada());
       }
-      if (listaEscuelas[i].nombre == nombre.valor) {
-        return Right(listaEscuelas[i]);
+      if (_listaEscuelas[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
+        return Right(_listaEscuelas[i]);
       }
     }
     return Left(PersonajeNoEncontrado());
@@ -74,40 +66,32 @@ class RepositorioEscuelaReal extends RepositorioEscuela {
 }
 
 class RepositorioPruebasEscuela extends RepositorioEscuela {
+  RepositorioPruebasEscuela(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerEscuela(
       NombreFormado escuela, NombreFormado nombre) async {
-    if (listaEscuelas.isEmpty) {
-      try {
-        json = leeJson(jsonGryffindor);
-      } catch (e) {
-        return Left(JsonNoEncontrado());
+    var resultado = await constructor.obtenerDatos('offline', _jsonGryffindor);
+    resultado.match((l) {
+      return Left(l);
+    }, (r) {
+      _listaEscuelas = _obtenerListaEscuelas(r);
+    });
+    for (var i = 0; i < _listaEscuelas.length; i++) {
+      if (_listaEscuelas[i].escuela!.toLowerCase() !=
+          escuela.valor.toLowerCase()) {
+        return Left(EscuelaNoEncontrada());
       }
-    }
-    try {
-      listaEscuelas = obtenerListaEscuelas(json);
-      for (var i = 0; i < listaEscuelas.length; i++) {
-        if (listaEscuelas[i].escuela != escuela.valor) {
-          return Left(EscuelaNoEncontrada());
-        }
-        if (listaEscuelas[i].nombre == nombre.valor) {
-          return Right(listaEscuelas[i]);
-        }
+      if (_listaEscuelas[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
+        return Right(_listaEscuelas[i]);
       }
-    } catch (e) {
-      return Left(JsonMalFormado());
     }
     return Left(PersonajeNoEncontrado());
   }
 }
 
-List<dynamic> leeJson(String rutaJson) {
-  List<dynamic> json;
-  json = jsonDecode((File(rutaJson).readAsStringSync()));
-  return json;
-}
-
-List<Personaje> obtenerListaEscuelas(List<dynamic> json) {
+List<Personaje> _obtenerListaEscuelas(List<dynamic> json) {
   List<Personaje> listaPersonajes = [];
   Personaje p;
   for (var i = 0; i < json.length; i++) {

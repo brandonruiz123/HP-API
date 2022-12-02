@@ -1,15 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
 import 'package:hp_api_application/caracteristicas/dominio/problema.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 import 'package:hp_api_application/caracteristicas/repositorios/repositorio_personaje.dart';
 
 void main() {
   group('RepositorioPersonaje', () {
     group('pruebas offline: ', () {
       test('con Harry Potter me devuelve un personaje', () async {
-        RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje();
-        var resultado =
-            await rp.obtenerPersonaje(NombreFormado.contructor('Harry Potter'));
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje(rpj);
+        var resultado = await rp
+            .obtenerPersonaje(NombreFormado.constructor('Harry Potter'));
         resultado.match((l) {
           expect(false, equals(true));
         }, (r) {
@@ -21,9 +23,10 @@ void main() {
         });
       });
       test('con Harry Popote arroja PersonajeNoEncontrado', () async {
-        RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje();
-        var resultado =
-            await rp.obtenerPersonaje(NombreFormado.contructor('Harry Popote'));
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPruebasPersonaje rp = RepositorioPruebasPersonaje(rpj);
+        var resultado = await rp
+            .obtenerPersonaje(NombreFormado.constructor('Harry Popote'));
         resultado.match((l) {
           expect(l, isA<PersonajeNoEncontrado>());
         }, (r) {
@@ -33,9 +36,10 @@ void main() {
     });
     group('pruebas online: ', () {
       test('con Hermione Granger me devuelve un personaje', () async {
-        RepositorioPersonajeReal rp = RepositorioPersonajeReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPersonajeReal rp = RepositorioPersonajeReal(rpj);
         var resultado = await rp
-            .obtenerPersonaje(NombreFormado.contructor('Hermione Granger'));
+            .obtenerPersonaje(NombreFormado.constructor('Hermione Granger'));
         resultado.match((l) {
           expect(false, equals(true));
         }, (r) {
@@ -50,9 +54,10 @@ void main() {
       });
 
       test('con Hermione Gringer arroja PersonajeNoEncontrado', () async {
-        RepositorioPersonajeReal rp = RepositorioPersonajeReal();
+        RepositorioPruebaJson rpj = RepositorioPruebaJson();
+        RepositorioPersonajeReal rp = RepositorioPersonajeReal(rpj);
         var resultado = await rp
-            .obtenerPersonaje(NombreFormado.contructor('Hermione Gringer'));
+            .obtenerPersonaje(NombreFormado.constructor('Hermione Gringer'));
         resultado.match((l) {
           expect(l, isA<PersonajeNoEncontrado>());
         }, (r) {

@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 import '../dominio/personaje.dart';
 import '../dominio/problema.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 
 String _nombrejson = '';
 List<dynamic>? _nombresAlt;
@@ -29,39 +26,33 @@ bool? _vive;
 String? _imagen;
 
 String _jsonStaff = './lib/caracteristicas/datos/datos_staff.json';
-List<dynamic> _json = [];
 List<Personaje> _listaStaff = [];
 String _base = 'https://hp-api.onrender.com/api/characters/staff';
 
 abstract class RepositorioStaff {
+  late RepositorioPruebaJson constructor;
+  RepositorioStaff(this.constructor);
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre);
 }
 
 class RepositorioStaffReal extends RepositorioStaff {
+  RepositorioStaffReal(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre) async {
     if (_listaStaff.isEmpty) {
-      //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(_base);
-      final respuesta = await http.get(direccion);
-      if (respuesta.statusCode != 200) {
-        return left(ErrorDeConexion());
-      }
-      //si no hubo problema al recibir la respuesta, esta se guarda
-      _json = jsonDecode(respuesta.body);
-      //se obtiene la lista de los personajes
-      try {
-        _listaStaff = obtenerListaStaff(_json);
-      } catch (e) {
-        return Left(JsonMalFormado());
-      }
+      var resultado = await constructor.obtenerDatos('online', _base);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaStaff = _obtenerListaStaff(r);
+      });
     }
-    //si la lista no esta vacia no consume la api y solo busca el personaje
     for (var i = 0; i < _listaStaff.length; i++) {
       if (_listaStaff[i].varitaHowarts == false) {
         return Left(NoEsStaff());
       }
-      if (_listaStaff[i].nombre == nombre.valor) {
+      if (_listaStaff[i].nombre.toLowerCase() == nombre.valor.toLowerCase()) {
         return Right(_listaStaff[i]);
       }
     }
@@ -70,39 +61,31 @@ class RepositorioStaffReal extends RepositorioStaff {
 }
 
 class RepositorioPruebasStaff extends RepositorioStaff {
+  RepositorioPruebasStaff(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerStaff(NombreFormado nombre) async {
     if (_listaStaff.isEmpty) {
-      try {
-        _json = leeJson(_jsonStaff);
-      } catch (e) {
-        return Left(JsonNoEncontrado());
-      }
+      var resultado = await constructor.obtenerDatos('offline', _jsonStaff);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaStaff = _obtenerListaStaff(r);
+      });
     }
-    try {
-      _listaStaff = obtenerListaStaff(_json);
-      for (var i = 0; i < _listaStaff.length; i++) {
-        if (_listaStaff[i].varitaHowarts == false) {
-          return Left(NoEsStaff());
-        }
-        if (_listaStaff[i].nombre == nombre.valor) {
-          return Right(_listaStaff[i]);
-        }
+    for (var i = 0; i < _listaStaff.length; i++) {
+      if (_listaStaff[i].varitaHowarts == false) {
+        return Left(NoEsStaff());
       }
-    } catch (e) {
-      return Left(JsonMalFormado());
+      if (_listaStaff[i].nombre.toLowerCase() == nombre.valor.toLowerCase()) {
+        return Right(_listaStaff[i]);
+      }
     }
     return Left(StaffNoEncontrado());
   }
 }
 
-List<dynamic> leeJson(String rutaJson) {
-  List<dynamic> json;
-  json = jsonDecode((File(rutaJson).readAsStringSync()));
-  return json;
-}
-
-List<Personaje> obtenerListaStaff(List<dynamic> json) {
+List<Personaje> _obtenerListaStaff(List<dynamic> json) {
   List<Personaje> listaPersonajes = [];
   Personaje p;
   for (var i = 0; i < json.length; i++) {

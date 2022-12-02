@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 import '../dominio/personaje.dart';
 import '../dominio/problema.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 
 String _nombrejson = '';
 List<dynamic>? _nombresAlt;
@@ -29,40 +26,35 @@ bool? _vive;
 String? _imagen;
 
 String _jsonEstudiante = './lib/caracteristicas/datos/datos_estudiantes.json';
-List<dynamic> _json = [];
 List<Personaje> _listaEstudiantes = [];
 String _base = 'https://hp-api.onrender.com/api/characters/students';
 
 abstract class RepositorioEstudiante {
+  late RepositorioPruebaJson constructor;
+  RepositorioEstudiante(this.constructor);
   Future<Either<Problema, Personaje>> obtenerEstudiante(NombreFormado nombre);
 }
 
 class RepositorioEstudianteReal extends RepositorioEstudiante {
+  RepositorioEstudianteReal(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerEstudiante(
       NombreFormado nombre) async {
     if (_listaEstudiantes.isEmpty) {
-      //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(_base);
-      final respuesta = await http.get(direccion);
-      if (respuesta.statusCode != 200) {
-        return left(ErrorDeConexion());
-      }
-      //si no hubo problema al recibir la respuesta, esta se guarda
-      _json = jsonDecode(respuesta.body);
-      //se obtiene la lista de los personajes
-      try {
-        _listaEstudiantes = obtenerListaEstudiantes(_json);
-      } catch (e) {
-        return Left(JsonMalFormado());
-      }
+      var resultado = await constructor.obtenerDatos('online', _base);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaEstudiantes = _obtenerListaEstudiantes(r);
+      });
     }
-    //si la lista no esta vacia no consume la api y solo busca el personaje
     for (var i = 0; i < _listaEstudiantes.length; i++) {
       if (_listaEstudiantes[i].estudianteHowarts == false) {
         return Left(NoEsEstudiante());
       }
-      if (_listaEstudiantes[i].nombre == nombre.valor) {
+      if (_listaEstudiantes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaEstudiantes[i]);
       }
     }
@@ -71,40 +63,34 @@ class RepositorioEstudianteReal extends RepositorioEstudiante {
 }
 
 class RepositorioPruebasEstudiante extends RepositorioEstudiante {
+  RepositorioPruebasEstudiante(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerEstudiante(
       NombreFormado nombre) async {
     if (_listaEstudiantes.isEmpty) {
-      try {
-        _json = leeJson(_jsonEstudiante);
-      } catch (e) {
-        return Left(JsonNoEncontrado());
-      }
+      var resultado =
+          await constructor.obtenerDatos('offline', _jsonEstudiante);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaEstudiantes = _obtenerListaEstudiantes(r);
+      });
     }
-    try {
-      _listaEstudiantes = obtenerListaEstudiantes(_json);
-      for (var i = 0; i < _listaEstudiantes.length; i++) {
-        if (_listaEstudiantes[i].estudianteHowarts == false) {
-          return Left(NoEsEstudiante());
-        }
-        if (_listaEstudiantes[i].nombre == nombre.valor) {
-          return Right(_listaEstudiantes[i]);
-        }
+    for (var i = 0; i < _listaEstudiantes.length; i++) {
+      if (_listaEstudiantes[i].estudianteHowarts == false) {
+        return Left(NoEsEstudiante());
       }
-    } catch (e) {
-      return Left(JsonMalFormado());
+      if (_listaEstudiantes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
+        return Right(_listaEstudiantes[i]);
+      }
     }
     return Left(EstudianteNoEncontrado());
   }
 }
 
-List<dynamic> leeJson(String rutaJson) {
-  List<dynamic> json;
-  json = jsonDecode((File(rutaJson).readAsStringSync()));
-  return json;
-}
-
-List<Personaje> obtenerListaEstudiantes(List<dynamic> json) {
+List<Personaje> _obtenerListaEstudiantes(List<dynamic> json) {
   List<Personaje> listaPersonajes = [];
   Personaje p;
   for (var i = 0; i < json.length; i++) {
@@ -127,6 +113,9 @@ List<Personaje> obtenerListaEstudiantes(List<dynamic> json) {
     _actoresAlt = json[i]['alternate_actors'];
     _vive = json[i]['alive'];
     _imagen = json[i]['image'];
+    if (json[i]['image'].toString().contains('herokuapp')) {
+      _imagen = json[i]['image'].toString().replaceAll('herokuapp', 'onrender');
+    }
     p = Personaje.constructor(
         nombre: _nombrejson,
         actor: _actor,

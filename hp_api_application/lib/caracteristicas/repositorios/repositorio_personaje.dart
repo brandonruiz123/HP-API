@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:hp_api_application/caracteristicas/dominio/nombre_formado.dart';
+import 'package:hp_api_application/caracteristicas/repositorios/repositorio_json.dart';
 
 import '../dominio/personaje.dart';
 import '../dominio/problema.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 
 String _nombrejson = '';
 List<dynamic>? _nombresAlt;
@@ -29,37 +26,31 @@ bool? _vive;
 String? _imagen;
 
 List<Personaje> _listaPersonajes = [];
-List<dynamic> _json = [];
 String _base = 'https://hp-api.onrender.com/api/characters';
 String _jsonPersonaje = './lib/caracteristicas/datos/datos_personaje.json';
 
 abstract class RepositorioPersonaje {
+  late RepositorioPruebaJson constructor;
+  RepositorioPersonaje(this.constructor);
   Future<Either<Problema, Personaje>> obtenerPersonaje(NombreFormado nombre);
 }
 
 class RepositorioPersonajeReal extends RepositorioPersonaje {
+  RepositorioPersonajeReal(super.constructor);
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
     if (_listaPersonajes.isEmpty) {
-      //si la lista esta vacia, consume la api
-      Uri direccion = Uri.parse(_base);
-      final respuesta = await http.get(direccion);
-      if (respuesta.statusCode != 200) {
-        return left(ErrorDeConexion());
-      }
-      //si no hubo problema al recibir la respuesta, esta se guarda
-      _json = jsonDecode(respuesta.body);
-      //se obtiene la lista de los personajes
-      try {
-        _listaPersonajes = obtenerListaPersonajes(_json);
-      } catch (e) {
-        return Left(JsonMalFormado());
-      }
+      var resultado = await constructor.obtenerDatos('online', _base);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaPersonajes = _obtenerListaPersonajes(r);
+      });
     }
-    //si la lista no esta vacia no consume la api y solo busca el personaje
     for (var i = 0; i < _listaPersonajes.length; i++) {
-      if (_listaPersonajes[i].nombre == nombre.valor) {
+      if (_listaPersonajes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
         return Right(_listaPersonajes[i]);
       }
     }
@@ -68,37 +59,30 @@ class RepositorioPersonajeReal extends RepositorioPersonaje {
 }
 
 class RepositorioPruebasPersonaje extends RepositorioPersonaje {
+  RepositorioPruebasPersonaje(super.constructor);
+
   @override
   Future<Either<Problema, Personaje>> obtenerPersonaje(
       NombreFormado nombre) async {
     if (_listaPersonajes.isEmpty) {
-      try {
-        _json = leeJson(_jsonPersonaje);
-      } catch (e) {
-        return Left(JsonNoEncontrado());
-      }
+      var resultado = await constructor.obtenerDatos('offline', _jsonPersonaje);
+      resultado.match((l) {
+        return Left(l);
+      }, (r) {
+        _listaPersonajes = _obtenerListaPersonajes(r);
+      });
     }
-    try {
-      _listaPersonajes = obtenerListaPersonajes(_json);
-      for (var i = 0; i < _listaPersonajes.length; i++) {
-        if (_listaPersonajes[i].nombre == nombre.valor) {
-          return Right(_listaPersonajes[i]);
-        }
+    for (var i = 0; i < _listaPersonajes.length; i++) {
+      if (_listaPersonajes[i].nombre.toLowerCase() ==
+          nombre.valor.toLowerCase()) {
+        return Right(_listaPersonajes[i]);
       }
-    } catch (e) {
-      return Left(JsonMalFormado());
     }
     return Left(PersonajeNoEncontrado());
   }
 }
 
-List<dynamic> leeJson(String rutaJson) {
-  List<dynamic> json;
-  json = jsonDecode((File(rutaJson).readAsStringSync()));
-  return json;
-}
-
-List<Personaje> obtenerListaPersonajes(List<dynamic> json) {
+List<Personaje> _obtenerListaPersonajes(List<dynamic> json) {
   List<Personaje> listaPersonajes = [];
   Personaje p;
   for (var i = 0; i < json.length; i++) {
@@ -121,6 +105,9 @@ List<Personaje> obtenerListaPersonajes(List<dynamic> json) {
     _actoresAlt = json[i]['alternate_actors'];
     _vive = json[i]['alive'];
     _imagen = json[i]['image'];
+    if (json[i]['image'].toString().contains('herokuapp')) {
+      _imagen = json[i]['image'].toString().replaceAll('herokuapp', 'onrender');
+    }
     p = Personaje.constructor(
         nombre: _nombrejson,
         actor: _actor,
